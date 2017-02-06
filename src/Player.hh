@@ -1,0 +1,39 @@
+#ifndef __PLAYER_HH__
+#define __PLAYER_HH__
+
+#include "Graphics.hh"
+
+enum
+{
+    canMove,
+    isGoingLeft,
+    isGoingRight,
+    isGoingUp,
+    isGoingDown
+};
+
+enum
+{
+    DIR_DOWN,
+    DIR_UP,
+    DIR_LEFT,
+    DIR_RIGHT
+};
+
+class Player
+{
+    public:
+        int posX;
+        int posY;
+        std::vector<std::vector<unsigned int>> sprites;
+        unsigned int currentSprite;
+        unsigned int currentFrame;
+        std::vector<int> states;
+
+        Player(int, int);
+        void initSprites();
+        void animate(unsigned int);
+        void move();
+};
+
+#endif
