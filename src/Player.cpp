@@ -1,5 +1,5 @@
 #include "Player.hh"
-#include <iostream>
+
 extern Graphics graphics;
 
 Player::Player(int posX, int posY) : posX(posX), posY(posY)
@@ -15,52 +15,66 @@ Player::Player(int posX, int posY) : posX(posX), posY(posY)
 void Player::initSprites()
 {
     // Shut up, I know :c
-    this->sprites.resize(4, std::vector<unsigned int>());
-    this->sprites[DIR_DOWN].push_back(graphics.loadSprite("spr_maincharad_0.png", this->posX, this->posY, 2));
-    this->sprites[DIR_DOWN].push_back(graphics.loadSprite("spr_maincharad_1.png", this->posX, this->posY, 2, false));
-    this->sprites[DIR_DOWN].push_back(graphics.loadSprite("spr_maincharad_1.png", this->posX, this->posY, 2, false));
-    this->sprites[DIR_DOWN].push_back(graphics.loadSprite("spr_maincharad_1.png", this->posX, this->posY, 2, false));
-    this->sprites[DIR_DOWN].push_back(graphics.loadSprite("spr_maincharad_2.png", this->posX, this->posY, 2, false));
-    this->sprites[DIR_DOWN].push_back(graphics.loadSprite("spr_maincharad_2.png", this->posX, this->posY, 2, false));
-    this->sprites[DIR_DOWN].push_back(graphics.loadSprite("spr_maincharad_2.png", this->posX, this->posY, 2, false));
-    this->sprites[DIR_DOWN].push_back(graphics.loadSprite("spr_maincharad_3.png", this->posX, this->posY, 2, false));
-    this->sprites[DIR_DOWN].push_back(graphics.loadSprite("spr_maincharad_3.png", this->posX, this->posY, 2, false));
-    this->sprites[DIR_DOWN].push_back(graphics.loadSprite("spr_maincharad_3.png", this->posX, this->posY, 2, false));
-    this->sprites[DIR_DOWN].push_back(graphics.loadSprite("spr_maincharad_0.png", this->posX, this->posY, 2, false));
-    this->sprites[DIR_DOWN].push_back(graphics.loadSprite("spr_maincharad_0.png", this->posX, this->posY, 2, false));
-    this->sprites[DIR_UP].push_back(graphics.loadSprite("spr_maincharau_0.png", this->posX, this->posY, 2, false));
-    this->sprites[DIR_UP].push_back(graphics.loadSprite("spr_maincharau_1.png", this->posX, this->posY, 2, false));
-    this->sprites[DIR_UP].push_back(graphics.loadSprite("spr_maincharau_1.png", this->posX, this->posY, 2, false));
-    this->sprites[DIR_UP].push_back(graphics.loadSprite("spr_maincharau_1.png", this->posX, this->posY, 2, false));
-    this->sprites[DIR_UP].push_back(graphics.loadSprite("spr_maincharau_2.png", this->posX, this->posY, 2, false));
-    this->sprites[DIR_UP].push_back(graphics.loadSprite("spr_maincharau_2.png", this->posX, this->posY, 2, false));
-    this->sprites[DIR_UP].push_back(graphics.loadSprite("spr_maincharau_2.png", this->posX, this->posY, 2, false));
-    this->sprites[DIR_UP].push_back(graphics.loadSprite("spr_maincharau_3.png", this->posX, this->posY, 2, false));
-    this->sprites[DIR_UP].push_back(graphics.loadSprite("spr_maincharau_3.png", this->posX, this->posY, 2, false));
-    this->sprites[DIR_UP].push_back(graphics.loadSprite("spr_maincharau_3.png", this->posX, this->posY, 2, false));
-    this->sprites[DIR_UP].push_back(graphics.loadSprite("spr_maincharau_0.png", this->posX, this->posY, 2, false));
-    this->sprites[DIR_UP].push_back(graphics.loadSprite("spr_maincharau_0.png", this->posX, this->posY, 2, false));
-    this->sprites[DIR_LEFT].push_back(graphics.loadSprite("spr_maincharal_0.png", this->posX, this->posY, 2, false));
-    this->sprites[DIR_LEFT].push_back(graphics.loadSprite("spr_maincharal_1.png", this->posX, this->posY, 2, false));
-    this->sprites[DIR_LEFT].push_back(graphics.loadSprite("spr_maincharal_1.png", this->posX, this->posY, 2, false));
-    this->sprites[DIR_LEFT].push_back(graphics.loadSprite("spr_maincharal_1.png", this->posX, this->posY, 2, false));
-    this->sprites[DIR_LEFT].push_back(graphics.loadSprite("spr_maincharal_0.png", this->posX, this->posY, 2, false));
-    this->sprites[DIR_LEFT].push_back(graphics.loadSprite("spr_maincharal_0.png", this->posX, this->posY, 2, false));
-    this->sprites[DIR_RIGHT].push_back(graphics.loadSprite("spr_maincharar_0.png", this->posX, this->posY, 2, false));
-    this->sprites[DIR_RIGHT].push_back(graphics.loadSprite("spr_maincharar_1.png", this->posX, this->posY, 2, false));
-    this->sprites[DIR_RIGHT].push_back(graphics.loadSprite("spr_maincharar_1.png", this->posX, this->posY, 2, false));
-    this->sprites[DIR_RIGHT].push_back(graphics.loadSprite("spr_maincharar_1.png", this->posX, this->posY, 2, false));
-    this->sprites[DIR_RIGHT].push_back(graphics.loadSprite("spr_maincharar_0.png", this->posX, this->posY, 2, false));
-    this->sprites[DIR_RIGHT].push_back(graphics.loadSprite("spr_maincharar_0.png", this->posX, this->posY, 2, false));
-
-    for (int i = 0; i < this->sprites.size(); ++i)
+    std::vector<std::string> spritesDown =
     {
-        for (int j = 0; j < this->sprites[i].size(); ++j)
-        {
-            std::cout << this->sprites[i][j] << " " << graphics.sprites[this->sprites[i][j]].name << std::endl;
-        }
-        std::cout << std::endl;
-    }
+        "spr_maincharad_0.png",
+        "spr_maincharad_1.png",
+        "spr_maincharad_1.png",
+        "spr_maincharad_1.png",
+        "spr_maincharad_2.png",
+        "spr_maincharad_2.png",
+        "spr_maincharad_2.png",
+        "spr_maincharad_3.png",
+        "spr_maincharad_3.png",
+        "spr_maincharad_3.png",
+        "spr_maincharad_0.png",
+        "spr_maincharad_0.png"
+    };
+
+    std::vector<std::string> spritesUp =
+    {
+        "spr_maincharau_0.png",
+        "spr_maincharau_1.png",
+        "spr_maincharau_1.png",
+        "spr_maincharau_1.png",
+        "spr_maincharau_2.png",
+        "spr_maincharau_2.png",
+        "spr_maincharau_2.png",
+        "spr_maincharau_3.png",
+        "spr_maincharau_3.png",
+        "spr_maincharau_3.png",
+        "spr_maincharau_0.png",
+        "spr_maincharau_0.png"
+    };
+
+    std::vector<std::string> spritesLeft =
+    {
+        "spr_maincharal_0.png",
+        "spr_maincharal_1.png",
+        "spr_maincharal_1.png",
+        "spr_maincharal_1.png",
+        "spr_maincharal_0.png",
+        "spr_maincharal_0.png"
+    };
+
+    std::vector<std::string> spritesRight =
+    {
+        "spr_maincharar_0.png",
+        "spr_maincharar_1.png",
+        "spr_maincharar_1.png",
+        "spr_maincharar_1.png",
+        "spr_maincharar_0.png",
+        "spr_maincharar_0.png"
+    };
+
+    this->sprites.resize(4, std::vector<unsigned int>());
+
+    this->sprites[DIR_DOWN]  = graphics.loadAnimation(spritesDown,  this->posX, this->posY, 2);
+    this->sprites[DIR_UP]    = graphics.loadAnimation(spritesUp,    this->posX, this->posY, 2);
+    this->sprites[DIR_LEFT]  = graphics.loadAnimation(spritesLeft,  this->posX, this->posY, 2);
+    this->sprites[DIR_RIGHT] = graphics.loadAnimation(spritesRight, this->posX, this->posY, 2);
+
+    graphics.sprites[this->sprites[DIR_DOWN][0]].isVisible = true;
 }
 
 void Player::animate(unsigned int spriteID)
