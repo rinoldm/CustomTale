@@ -1,7 +1,6 @@
 #ifndef __GRAPHICS_HH__
 #define __GRAPHICS_HH__
 
-#include <string>
 #include <vector>
 #include <map>
 #include <SDL2/SDL.h>
@@ -39,6 +38,8 @@ class Graphics
     void    getInput();
     unsigned int loadSprite(const std::string &, int, int, double, bool);
     unsigned int loadSprite(const std::string &, int, int, double);
+    std::vector<unsigned int> loadAnimation(const std::vector<std::string> &, int, int, double);
+
     void    renderSprite(unsigned int);
     void    render();
     void    quit();
