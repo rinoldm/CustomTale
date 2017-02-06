@@ -1,5 +1,4 @@
 #include <iostream>
-#include <cstdlib>
 #include "Graphics.hh"
 #include "Game.hh"
 #include "Player.hh"
@@ -10,7 +9,8 @@ Graphics::Graphics(int winX, int winY, const std::string &winTitle) :
     windowX(winX),
     windowY(winY),
     windowTitle(winTitle),
-    fps(30)
+    fps(30),
+    lastSpriteID(-1)
 {
     this->init();
 }
@@ -87,13 +87,22 @@ unsigned int Graphics::loadSprite(const std::string &filename, int posX, int pos
     sprite.posY = posY;
     sprite.isVisible = isVisible;
 
-    this->sprites.insert(std::pair<unsigned int, Sprite>(this->lastSpriteID++, sprite));
-    return (lastSpriteID - 1);
+    this->sprites.insert(std::pair<unsigned int, Sprite>(++this->lastSpriteID, sprite));
+    return (this->lastSpriteID);
 }
 
 unsigned int Graphics::loadSprite(const std::string &filename, int posX, int posY, double scaleFactor)
 {
     return (this->loadSprite(filename, posX, posY, scaleFactor, true));
+}
+
+std::vector<unsigned int> Graphics::loadAnimation(const std::vector<std::string> &filenames, int posX, int posY, double scaleFactor)
+{
+    std::vector<unsigned int> frames;
+
+    for (int i = 0; i < filenames.size(); ++i)
+        frames.push_back(this->loadSprite(filenames[i], posX, posY, scaleFactor, false));
+    return (frames);
 }
 
 void Graphics::renderSprite(unsigned int spriteID)
