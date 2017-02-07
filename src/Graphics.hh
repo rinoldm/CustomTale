@@ -1,10 +1,15 @@
 #ifndef __GRAPHICS_HH__
 #define __GRAPHICS_HH__
 
+#include <iostream>
 #include <vector>
 #include <map>
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
+
+#include "Game.hh"
+#include "Player.hh"
+#include "../lib/jsoncpp/json/json.h"
 
 class Graphics
 {
@@ -38,7 +43,7 @@ class Graphics
     void    getInput();
     unsigned int loadSprite(const std::string &, int, int, double, bool);
     unsigned int loadSprite(const std::string &, int, int, double);
-    std::vector<unsigned int> loadAnimation(const std::vector<std::string> &, int, int, double);
+    std::vector<unsigned int> loadAnimation(Json::Value, int, int, double);
 
     void    renderSprite(unsigned int);
     void    render();

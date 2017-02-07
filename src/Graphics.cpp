@@ -1,7 +1,4 @@
-#include <iostream>
 #include "Graphics.hh"
-#include "Game.hh"
-#include "Player.hh"
 
 extern Game game;
 
@@ -23,19 +20,18 @@ void Graphics::error(const std::string &msg)
 
 void Graphics::init()
 {
-    SDL_Init(SDL_INIT_EVERYTHING);
-    this->window = SDL_CreateWindow(this->windowTitle.c_str(),
-                                    SDL_WINDOWPOS_UNDEFINED,
-                                    SDL_WINDOWPOS_UNDEFINED,
-                                    this->windowX,
-                                    this->windowY,
-                                    0);
-    this->renderer = SDL_CreateRenderer(this->window, -1, 0);
-    IMG_Init(IMG_INIT_JPG | IMG_INIT_PNG);
+    if (SDL_Init(SDL_INIT_EVERYTHING) < 0)
+        exit(-1);
 
-    // load game sprites, will probably move it in a function
-    this->loadSprite("spr_undertaletitle_0.png", 0, 0, 2);
-    game.player.initSprites();
+    this->window = SDL_CreateWindow(this->windowTitle.c_str(), SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, this->windowX, this->windowY, 0);
+    if (this->window == NULL)
+        exit(-1);
+
+    this->renderer = SDL_CreateRenderer(this->window, -1, 0);
+    if (this->renderer == NULL)
+        exit(-1);
+
+    IMG_Init(IMG_INIT_JPG | IMG_INIT_PNG);
 }
 
 void Graphics::getInput()
@@ -79,7 +75,11 @@ unsigned int Graphics::loadSprite(const std::string &filename, int posX, int pos
     sprite.image = IMG_Load(("sprites/" + filename).c_str());
     if (sprite.image == NULL)
         exit(-1);
+
     sprite.texture = SDL_CreateTextureFromSurface(this->renderer, sprite.image);
+    if (sprite.texture == NULL)
+        exit(-1);
+
     sprite.name = filename;
     sprite.sizeX = scaleFactor * sprite.image->w;
     sprite.sizeY = scaleFactor * sprite.image->h;
@@ -96,12 +96,12 @@ unsigned int Graphics::loadSprite(const std::string &filename, int posX, int pos
     return (this->loadSprite(filename, posX, posY, scaleFactor, true));
 }
 
-std::vector<unsigned int> Graphics::loadAnimation(const std::vector<std::string> &filenames, int posX, int posY, double scaleFactor)
+std::vector<unsigned int> Graphics::loadAnimation(Json::Value json, int posX, int posY, double scaleFactor)
 {
     std::vector<unsigned int> frames;
 
-    for (int i = 0; i < filenames.size(); ++i)
-        frames.push_back(this->loadSprite(filenames[i], posX, posY, scaleFactor, false));
+    for (unsigned int i = 0; i < json.size(); ++i)
+        frames.push_back(this->loadSprite(json[i].asString(), posX, posY, scaleFactor, false));
     return (frames);
 }
 

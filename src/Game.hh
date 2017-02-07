@@ -2,6 +2,8 @@
 #define __GAME_HH__
 
 #include <vector>
+
+#include "Graphics.hh"
 #include "Player.hh"
 
 enum

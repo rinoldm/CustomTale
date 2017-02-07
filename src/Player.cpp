@@ -1,6 +1,8 @@
 #include "Player.hh"
+#include "Graphics.hh"
 
 extern Graphics graphics;
+extern Json::Value project;
 
 Player::Player(int posX, int posY) : posX(posX), posY(posY)
 {
@@ -14,65 +16,13 @@ Player::Player(int posX, int posY) : posX(posX), posY(posY)
 
 void Player::initSprites()
 {
-    // Shut up, I know :c
-    std::vector<std::string> spritesDown =
-    {
-        "spr_maincharad_0.png",
-        "spr_maincharad_1.png",
-        "spr_maincharad_1.png",
-        "spr_maincharad_1.png",
-        "spr_maincharad_2.png",
-        "spr_maincharad_2.png",
-        "spr_maincharad_2.png",
-        "spr_maincharad_3.png",
-        "spr_maincharad_3.png",
-        "spr_maincharad_3.png",
-        "spr_maincharad_0.png",
-        "spr_maincharad_0.png"
-    };
-
-    std::vector<std::string> spritesUp =
-    {
-        "spr_maincharau_0.png",
-        "spr_maincharau_1.png",
-        "spr_maincharau_1.png",
-        "spr_maincharau_1.png",
-        "spr_maincharau_2.png",
-        "spr_maincharau_2.png",
-        "spr_maincharau_2.png",
-        "spr_maincharau_3.png",
-        "spr_maincharau_3.png",
-        "spr_maincharau_3.png",
-        "spr_maincharau_0.png",
-        "spr_maincharau_0.png"
-    };
-
-    std::vector<std::string> spritesLeft =
-    {
-        "spr_maincharal_0.png",
-        "spr_maincharal_1.png",
-        "spr_maincharal_1.png",
-        "spr_maincharal_1.png",
-        "spr_maincharal_0.png",
-        "spr_maincharal_0.png"
-    };
-
-    std::vector<std::string> spritesRight =
-    {
-        "spr_maincharar_0.png",
-        "spr_maincharar_1.png",
-        "spr_maincharar_1.png",
-        "spr_maincharar_1.png",
-        "spr_maincharar_0.png",
-        "spr_maincharar_0.png"
-    };
+    Json::Value sprites = project["Player"]["sprites"];
 
     this->sprites.resize(4, std::vector<unsigned int>());
-
-    this->sprites[DIR_DOWN]  = graphics.loadAnimation(spritesDown,  this->posX, this->posY, 2);
-    this->sprites[DIR_UP]    = graphics.loadAnimation(spritesUp,    this->posX, this->posY, 2);
-    this->sprites[DIR_LEFT]  = graphics.loadAnimation(spritesLeft,  this->posX, this->posY, 2);
-    this->sprites[DIR_RIGHT] = graphics.loadAnimation(spritesRight, this->posX, this->posY, 2);
+    this->sprites[DIR_DOWN]  = graphics.loadAnimation(sprites["walkingDown"],  this->posX, this->posY, 2);
+    this->sprites[DIR_UP]    = graphics.loadAnimation(sprites["walkingUp"],    this->posX, this->posY, 2);
+    this->sprites[DIR_LEFT]  = graphics.loadAnimation(sprites["walkingLeft"],  this->posX, this->posY, 2);
+    this->sprites[DIR_RIGHT] = graphics.loadAnimation(sprites["walkingRight"], this->posX, this->posY, 2);
 
     graphics.sprites[this->sprites[DIR_DOWN][0]].isVisible = true;
 }
@@ -97,10 +47,10 @@ void Player::move()
 {
     if (this->states[canMove])
     {
-        if (this->states[isGoingLeft]) std::cout << "L"; else std::cout << " ";
+        if (this->states[isGoingLeft])  std::cout << "L"; else std::cout << " ";
         if (this->states[isGoingRight]) std::cout << "R"; else std::cout << " ";
-        if (this->states[isGoingUp]) std::cout << "U"; else std::cout << " ";
-        if (this->states[isGoingDown]) std::cout << "D"; else std::cout << " ";
+        if (this->states[isGoingUp])    std::cout << "U"; else std::cout << " ";
+        if (this->states[isGoingDown])  std::cout << "D"; else std::cout << " ";
         std::cout << std::endl;
 
         // Erase last frame of walking animation

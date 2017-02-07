@@ -1,7 +1,11 @@
 #ifndef __PLAYER_HH__
 #define __PLAYER_HH__
 
-#include "Graphics.hh"
+#include <iostream>
+#include <fstream>
+
+//#include "Graphics.hh"
+#include "../lib/jsoncpp/json/json.h"
 
 enum
 {
