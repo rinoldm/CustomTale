@@ -40,14 +40,14 @@ void Player::animate(unsigned int spriteID)
     if (this->currentSprite == spriteID) // Already walking in that direction
     {
         // Advance one frame and reset if last frame
-        if (++this->currentFrame == graphics.sprites[this->sprites[currentSprite]].size())
-            this->currentFrame = 0;
+        if (++graphics.getSprite(this->sprites[this->currentSprite]).currentFrame == graphics.getSprite(this->sprites[this->currentSprite]).frames.size())
+            graphics.resetSprite(this->sprites[this->currentSprite]);
     }
     else // Just changed direction
     {
         // Set animation to first frame of correct direction
         this->currentSprite = spriteID;
-        this->currentFrame = 0;
+        graphics.resetSprite(this->sprites[this->currentSprite]);
     }
 }
 
@@ -62,12 +62,12 @@ void Player::move()
         std::cout << std::endl;
 
         // Erase last frame of walking animation
-        graphics.sprites[this->sprites[this->currentSprite]][this->currentFrame].isVisible = false;
+        graphics.getCurrentFrame(this->sprites[this->currentSprite]).isVisible = false;
 
         // Reset walking animation if not moving
         if (this->states[isGoingLeft] == this->states[isGoingRight] &&
             this->states[isGoingUp]   == this->states[isGoingDown])
-            this->currentFrame = 0;
+            graphics.resetSprite(this->sprites[this->currentSprite]);
 
         // Left animation if walking left but not up/left or down/left
         if (this->states[isGoingLeft])
@@ -102,8 +102,10 @@ void Player::move()
         }
 
         // Update position of current frame of animation
-        graphics.sprites[this->sprites[this->currentSprite]][this->currentFrame].posX = this->posX;
-        graphics.sprites[this->sprites[this->currentSprite]][this->currentFrame].posY = this->posY;
-        graphics.sprites[this->sprites[this->currentSprite]][this->currentFrame].isVisible = true;
+
+        graphics.getCurrentFrame(this->sprites[this->currentSprite]).posX = this->posX;
+        graphics.getCurrentFrame(this->sprites[this->currentSprite]).posY = this->posY;
+        graphics.getCurrentFrame(this->sprites[this->currentSprite]).isVisible = true;
+
     }
 }

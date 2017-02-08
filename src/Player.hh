@@ -31,7 +31,6 @@ class Player
         int posY;
         std::vector<unsigned int> sprites;
         unsigned int currentSprite;
-        unsigned int currentFrame;
         std::vector<int> states;
 
         Player(int, int);

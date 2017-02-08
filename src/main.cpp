@@ -21,9 +21,9 @@ int main(int ac, char **av)
     for (auto i = graphics.sprites.begin(); i != graphics.sprites.end(); ++i)
     {
         std::cout << "  " << i->first << std::endl;
-        for (unsigned int j = 0; j < i->second.size(); ++j)
+        for (unsigned int j = 0; j < i->second.frames.size(); ++j)
         {
-            std::cout << "    " << j << " " <<i->second[j].name << std::endl;
+            std::cout << "    " << j << " " <<i->second.frames[j].name << std::endl;
         }
     }
     while (!game.states[isQuitting])

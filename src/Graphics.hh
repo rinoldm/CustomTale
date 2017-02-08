@@ -21,12 +21,15 @@ class Graphics
         SDL_Event event;
         int fps;
         SDL_Renderer *renderer;
-        std::map<unsigned int, std::vector<Sprite>> sprites;
+        std::map<unsigned int, Sprite> sprites;
         unsigned int lastSpriteID;
 
     Graphics(int, int, const std::string &);
     void    error(const std::string &);
     void    init();
+    void    resetSprite(unsigned int);
+    Sprite  &getSprite(unsigned int);
+    Frame   &getCurrentFrame(unsigned int);
     void    getInput();
     unsigned int loadSprite(std::vector<std::string>, int, int, double, bool = true);
     unsigned int loadSprite(std::string, int, int, double, bool = true);

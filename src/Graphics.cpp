@@ -34,6 +34,21 @@ void Graphics::init()
     IMG_Init(IMG_INIT_JPG | IMG_INIT_PNG);
 }
 
+void Graphics::resetSprite(unsigned int spriteID)
+{
+    this->sprites[spriteID].currentFrame = 0;
+}
+
+Sprite &Graphics::getSprite(unsigned int spriteID)
+{
+    return (this->sprites[spriteID]);
+}
+
+Frame &Graphics::getCurrentFrame(unsigned int spriteID)
+{
+    return (this->sprites[spriteID].frames[this->sprites[spriteID].currentFrame]);
+}
+
 void Graphics::getInput()
 {
     while (SDL_PollEvent(&this->event) && !game.states[isQuitting])
@@ -70,11 +85,11 @@ void Graphics::getInput()
 
 unsigned int Graphics::loadSprite(std::vector<std::string> filenames, int posX, int posY, double scaleFactor, bool isVisible)
 {
-    std::vector<Sprite> sprites;
+    Sprite sprite;
 
     for (unsigned int i = 0; i < filenames.size(); ++i)
     {
-        Sprite frame;
+        Frame frame;
 
         frame.image = IMG_Load(("sprites/" + filenames[i]).c_str());
         if (frame.image == NULL)
@@ -91,10 +106,11 @@ unsigned int Graphics::loadSprite(std::vector<std::string> filenames, int posX, 
         frame.posY = posY;
         frame.isVisible = false;
 
-        sprites.push_back(frame);
+        sprite.frames.push_back(frame);
     }
-    sprites[0].isVisible = isVisible;
-    this->sprites.insert(std::pair<unsigned int, std::vector<Sprite>>(++this->lastSpriteID, sprites));
+    sprite.frames[0].isVisible = isVisible;
+    sprite.currentFrame = 0;
+    this->sprites.insert(std::pair<unsigned int, Sprite>(++this->lastSpriteID, sprite));
     return (this->lastSpriteID);
 }
 
@@ -112,13 +128,13 @@ void Graphics::initBackground()
 
 void Graphics::renderSprite(unsigned int spriteID)
 {
-    for (unsigned int frame = 0; frame < this->sprites[spriteID].size(); ++frame)
+    for (unsigned int frameID = 0; frameID < this->sprites[spriteID].frames.size(); ++frameID)
     {
-        Sprite sprite = this->sprites[spriteID][frame];
-        if (sprite.isVisible)
+        Frame frame = this->sprites[spriteID].frames[frameID];
+        if (frame.isVisible)
         {
-            SDL_Rect rect = {sprite.posX, sprite.posY, sprite.sizeX, sprite.sizeY};
-            SDL_RenderCopy(this->renderer, sprite.texture, NULL, &rect);
+            SDL_Rect rect = {frame.posX, frame.posY, frame.sizeX, frame.sizeY};
+            SDL_RenderCopy(this->renderer, frame.texture, NULL, &rect);
         }
     }
 }
@@ -139,8 +155,11 @@ void Graphics::quit()
 
     for (unsigned int i = 0; i < this->sprites.size(); ++i)
     {
-        SDL_FreeSurface(this->sprites[i][0].image);
-        SDL_DestroyTexture(this->sprites[i][0].texture);
+        for (unsigned int j = 0; j < this->sprites[i].frames.size(); ++j)
+        {
+            SDL_FreeSurface(this->sprites[i].frames[j].image);
+            SDL_DestroyTexture(this->sprites[i].frames[j].texture);
+        }
     }
     IMG_Quit();
     SDL_DestroyRenderer(this->renderer);
