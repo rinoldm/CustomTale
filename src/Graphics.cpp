@@ -1,6 +1,7 @@
 #include "Graphics.hh"
 
-extern Game game;
+extern Game         game;
+extern Json::Value  data;
 
 Graphics::Graphics(int winX, int winY, const std::string &winTitle) :
     windowX(winX),
@@ -83,7 +84,7 @@ void Graphics::getInput()
     }
 }
 
-unsigned int Graphics::loadSprite(std::vector<std::string> filenames, int posX, int posY, double scaleFactor, bool isVisible)
+unsigned int Graphics::loadSprite(std::vector<std::string> filenames, int posX, int posY, double scaleFactor, bool isVisible, bool isAnimated)
 {
     Sprite sprite;
 
@@ -110,41 +111,47 @@ unsigned int Graphics::loadSprite(std::vector<std::string> filenames, int posX, 
     }
     sprite.frames[0].isVisible = isVisible;
     sprite.currentFrame = 0;
+    sprite.isAnimated = isAnimated;
     this->sprites.insert(std::pair<unsigned int, Sprite>(++this->lastSpriteID, sprite));
     return (this->lastSpriteID);
 }
 
-unsigned int Graphics::loadSprite(std::string filename, int posX, int posY, double scaleFactor, bool isVisible)
+unsigned int Graphics::loadSprite(std::string filename, int posX, int posY, double scaleFactor, bool isVisible, bool isAnimated)
 {
     std::vector<std::string> filenames;
     filenames.push_back(filename);
-    return (this->loadSprite(filenames, posX, posY, scaleFactor, isVisible));
+    return (this->loadSprite(filenames, posX, posY, scaleFactor, isVisible, isAnimated));
 }
 
 void Graphics::initBackground()
 {
     this->loadSprite("spr_undertaletitle_0.png", 0, 0, 2);
+    this->loadSprite(game.jsonToStrings(data["Player"]["sprites"]["walkingDown"]), 20, 20, 2, true, true);
 }
 
 void Graphics::renderSprite(unsigned int spriteID)
 {
-    for (unsigned int frameID = 0; frameID < this->sprites[spriteID].frames.size(); ++frameID)
+    Frame frame = this->sprites[spriteID].frames[this->sprites[spriteID].currentFrame];
+
+    if (frame.isVisible)
     {
-        Frame frame = this->sprites[spriteID].frames[frameID];
-        if (frame.isVisible)
-        {
-            SDL_Rect rect = {frame.posX, frame.posY, frame.sizeX, frame.sizeY};
-            SDL_RenderCopy(this->renderer, frame.texture, NULL, &rect);
-        }
+        SDL_Rect rect = {frame.posX, frame.posY, frame.sizeX, frame.sizeY};
+        SDL_RenderCopy(this->renderer, frame.texture, NULL, &rect);
     }
 }
 
 void Graphics::render()
 {
     for (unsigned int i = 0; i < this->sprites.size(); ++i)
+    {
+        if (this->getSprite(i).isAnimated)
+        {
+            if (++this->getSprite(i).currentFrame == this->getSprite(i).frames.size())
+                this->resetSprite(i);
+            this->getCurrentFrame(i).isVisible = true;
+        }
         this->renderSprite(i);
-
-    this->renderSprite(game.player.sprites[game.player.currentSprite]);
+    }
 
     SDL_RenderPresent(this->renderer);
 }

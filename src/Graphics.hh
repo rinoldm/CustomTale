@@ -31,8 +31,8 @@ class Graphics
     Sprite  &getSprite(unsigned int);
     Frame   &getCurrentFrame(unsigned int);
     void    getInput();
-    unsigned int loadSprite(std::vector<std::string>, int, int, double, bool = true);
-    unsigned int loadSprite(std::string, int, int, double, bool = true);
+    unsigned int loadSprite(std::vector<std::string>, int, int, double, bool = true, bool = false);
+    unsigned int loadSprite(std::string, int, int, double, bool = true, bool = false);
     void    initBackground();
 
     void    renderSprite(unsigned int);

@@ -21,6 +21,7 @@ class Sprite
     public:
         std::vector<Frame> frames;
         unsigned int currentFrame;
+        bool isAnimated;
 };
 
 #endif
