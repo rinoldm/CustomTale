@@ -68,50 +68,58 @@ void Graphics::getInput()
     }
 }
 
-unsigned int Graphics::loadSprite(const std::string &filename, int posX, int posY, double scaleFactor, bool isVisible)
+unsigned int Graphics::loadSprite(std::vector<std::string> filenames, int posX, int posY, double scaleFactor, bool isVisible)
 {
-    Sprite sprite;
+    std::vector<Sprite> sprites;
 
-    sprite.image = IMG_Load(("sprites/" + filename).c_str());
-    if (sprite.image == NULL)
-        exit(-1);
+    for (unsigned int i = 0; i < filenames.size(); ++i)
+    {
+        Sprite frame;
 
-    sprite.texture = SDL_CreateTextureFromSurface(this->renderer, sprite.image);
-    if (sprite.texture == NULL)
-        exit(-1);
+        frame.image = IMG_Load(("sprites/" + filenames[i]).c_str());
+        if (frame.image == NULL)
+            exit(-1);
 
-    sprite.name = filename;
-    sprite.sizeX = scaleFactor * sprite.image->w;
-    sprite.sizeY = scaleFactor * sprite.image->h;
-    sprite.posX = posX;
-    sprite.posY = posY;
-    sprite.isVisible = isVisible;
+        frame.texture = SDL_CreateTextureFromSurface(this->renderer, frame.image);
+        if (frame.texture == NULL)
+            exit(-1);
 
-    this->sprites.insert(std::pair<unsigned int, Sprite>(++this->lastSpriteID, sprite));
+        frame.name = filenames[i];
+        frame.sizeX = scaleFactor * frame.image->w;
+        frame.sizeY = scaleFactor * frame.image->h;
+        frame.posX = posX;
+        frame.posY = posY;
+        frame.isVisible = false;
+
+        sprites.push_back(frame);
+    }
+    sprites[0].isVisible = isVisible;
+    this->sprites.insert(std::pair<unsigned int, std::vector<Sprite>>(++this->lastSpriteID, sprites));
     return (this->lastSpriteID);
 }
 
-unsigned int Graphics::loadSprite(const std::string &filename, int posX, int posY, double scaleFactor)
+unsigned int Graphics::loadSprite(std::string filename, int posX, int posY, double scaleFactor, bool isVisible)
 {
-    return (this->loadSprite(filename, posX, posY, scaleFactor, true));
+    std::vector<std::string> filenames;
+    filenames.push_back(filename);
+    return (this->loadSprite(filenames, posX, posY, scaleFactor, isVisible));
 }
 
-std::vector<unsigned int> Graphics::loadAnimation(Json::Value json, int posX, int posY, double scaleFactor)
+void Graphics::initBackground()
 {
-    std::vector<unsigned int> frames;
-
-    for (unsigned int i = 0; i < json.size(); ++i)
-        frames.push_back(this->loadSprite(json[i].asString(), posX, posY, scaleFactor, false));
-    return (frames);
+    this->loadSprite("spr_undertaletitle_0.png", 0, 0, 2);
 }
 
 void Graphics::renderSprite(unsigned int spriteID)
 {
-    Sprite sprite = this->sprites[spriteID];
-    if (sprite.isVisible)
+    for (unsigned int frame = 0; frame < this->sprites[spriteID].size(); ++frame)
     {
-        SDL_Rect rect = {sprite.posX, sprite.posY, sprite.sizeX, sprite.sizeY};
-        SDL_RenderCopy(this->renderer, sprite.texture, NULL, &rect);
+        Sprite sprite = this->sprites[spriteID][frame];
+        if (sprite.isVisible)
+        {
+            SDL_Rect rect = {sprite.posX, sprite.posY, sprite.sizeX, sprite.sizeY};
+            SDL_RenderCopy(this->renderer, sprite.texture, NULL, &rect);
+        }
     }
 }
 
@@ -120,7 +128,8 @@ void Graphics::render()
     for (unsigned int i = 0; i < this->sprites.size(); ++i)
         this->renderSprite(i);
 
-    this->renderSprite(game.player.sprites[game.player.currentSprite][game.player.currentFrame]);
+    this->renderSprite(game.player.sprites[game.player.currentSprite]);
+
     SDL_RenderPresent(this->renderer);
 }
 
@@ -130,8 +139,8 @@ void Graphics::quit()
 
     for (unsigned int i = 0; i < this->sprites.size(); ++i)
     {
-        SDL_FreeSurface(this->sprites[i].image);
-        SDL_DestroyTexture(this->sprites[i].texture);
+        SDL_FreeSurface(this->sprites[i][0].image);
+        SDL_DestroyTexture(this->sprites[i][0].texture);
     }
     IMG_Quit();
     SDL_DestroyRenderer(this->renderer);

@@ -29,7 +29,7 @@ class Player
     public:
         int posX;
         int posY;
-        std::vector<std::vector<unsigned int>> sprites;
+        std::vector<unsigned int> sprites;
         unsigned int currentSprite;
         unsigned int currentFrame;
         std::vector<int> states;

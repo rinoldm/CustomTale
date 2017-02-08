@@ -4,28 +4,15 @@
 #include <iostream>
 #include <vector>
 #include <map>
-#include <SDL2/SDL.h>
-#include <SDL2/SDL_image.h>
 
+
+#include "Sprite.hh"
 #include "Game.hh"
 #include "Player.hh"
 #include "../lib/jsoncpp/json/json.h"
 
 class Graphics
 {
-    public:
-    typedef struct
-    {
-        SDL_Surface *image;
-        SDL_Texture *texture;
-        std::string name;
-        int posX;
-        int posY;
-        int sizeX;
-        int sizeY;
-        bool isVisible;
-    } Sprite;
-
     public:
         SDL_Window *window;
         int windowX;
@@ -34,16 +21,16 @@ class Graphics
         SDL_Event event;
         int fps;
         SDL_Renderer *renderer;
-        std::map<unsigned int, Sprite> sprites;
+        std::map<unsigned int, std::vector<Sprite>> sprites;
         unsigned int lastSpriteID;
 
     Graphics(int, int, const std::string &);
     void    error(const std::string &);
     void    init();
     void    getInput();
-    unsigned int loadSprite(const std::string &, int, int, double, bool);
-    unsigned int loadSprite(const std::string &, int, int, double);
-    std::vector<unsigned int> loadAnimation(Json::Value, int, int, double);
+    unsigned int loadSprite(std::vector<std::string>, int, int, double, bool = true);
+    unsigned int loadSprite(std::string, int, int, double, bool = true);
+    void    initBackground();
 
     void    renderSprite(unsigned int);
     void    render();

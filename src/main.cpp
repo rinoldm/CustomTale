@@ -14,9 +14,18 @@ int main(int ac, char **av)
     std::ifstream projectFile("project.json", std::ifstream::binary);
     projectFile >> project;
 
-    graphics.loadSprite("spr_undertaletitle_0.png", 0, 0, 2);
+    graphics.initBackground();
+    //graphics.initMap();
     game.player.initSprites();
 
+    for (auto i = graphics.sprites.begin(); i != graphics.sprites.end(); ++i)
+    {
+        std::cout << "  " << i->first << std::endl;
+        for (unsigned int j = 0; j < i->second.size(); ++j)
+        {
+            std::cout << "    " << j << " " <<i->second[j].name << std::endl;
+        }
+    }
     while (!game.states[isQuitting])
     {
         graphics.getInput();
