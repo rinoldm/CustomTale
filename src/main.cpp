@@ -30,7 +30,7 @@ int main(int ac, char **av)
     graphics.initBackground();
     //graphics.initMap();
     game.player.initSprites();
-    debugDisplaySprites();
+    //debugDisplaySprites();
 
     while (!game.states[isQuitting])
     {

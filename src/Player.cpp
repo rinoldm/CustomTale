@@ -20,10 +20,10 @@ void Player::initSprites()
     Json::Value sprites = data["Player"]["sprites"];
 
     this->sprites.resize(4, -1);
-    this->sprites[DIR_DOWN]  = graphics.loadSprite(game.jsonToStrings(sprites["walkingDown"]),  this->posX, this->posY, 2);
-    this->sprites[DIR_UP]    = graphics.loadSprite(game.jsonToStrings(sprites["walkingUp"]),    this->posX, this->posY, 2, false);
-    this->sprites[DIR_LEFT]  = graphics.loadSprite(game.jsonToStrings(sprites["walkingLeft"]),  this->posX, this->posY, 2, false);
-    this->sprites[DIR_RIGHT] = graphics.loadSprite(game.jsonToStrings(sprites["walkingRight"]), this->posX, this->posY, 2, false);
+    this->sprites[DIR_DOWN]  = graphics.loadSprite(game.jsonToStrings(sprites["charaWalkingDown"]),  this->posX, this->posY, 2);
+    this->sprites[DIR_UP]    = graphics.loadSprite(game.jsonToStrings(sprites["charaWalkingUp"]),    this->posX, this->posY, 2, false);
+    this->sprites[DIR_LEFT]  = graphics.loadSprite(game.jsonToStrings(sprites["charaWalkingLeft"]),  this->posX, this->posY, 2, false);
+    this->sprites[DIR_RIGHT] = graphics.loadSprite(game.jsonToStrings(sprites["charaWalkingRight"]), this->posX, this->posY, 2, false);
 }
 
 void Player::animate(unsigned int spriteID)
@@ -95,7 +95,6 @@ void Player::move()
         }
 
         // Update position of current frame of animation
-
         graphics.getCurrentFrame(this->sprites[this->currentSprite]).posX = this->posX;
         graphics.getCurrentFrame(this->sprites[this->currentSprite]).posY = this->posY;
         graphics.getCurrentFrame(this->sprites[this->currentSprite]).isVisible = true;

@@ -101,10 +101,18 @@ unsigned int Graphics::loadSprite(std::string filename, int posX, int posY, doub
 void Graphics::initBackground()
 {
     this->loadSprite("spr_undertaletitle_0.png", 0, 0, 2);
-    this->loadSprite(game.jsonToStrings(data["Player"]["sprites"]["walkingDown"]),  100,  20, 2, true, true);
-    this->loadSprite(game.jsonToStrings(data["Player"]["sprites"]["walkingUp"]),     20, 100, 2, true, true);
-    this->loadSprite(game.jsonToStrings(data["Player"]["sprites"]["walkingLeft"]),  100, 100, 2, true, true);
-    this->loadSprite(game.jsonToStrings(data["Player"]["sprites"]["walkingRight"]),  20,  20, 2, true, true);
+
+    std::vector<std::string> chara;
+    for (int i = 0; i < 300; ++i)
+        chara.push_back("spr_truechara_0.png");
+    for (int i = 0; i < 30; ++i)
+        chara.push_back("spr_truechara_weird_0.png");
+    this->loadSprite(chara, 400, 300, 12, true, true);
+
+    for (int i = 0; i < 60; ++i)
+    {
+        this->loadSprite(game.jsonToStrings(data["Player"]["sprites"]["walkingDown"]),  20 + 40 * (i / 10),  20 + 60 * (i % 10), 2, true, true);
+    }
 }
 
 void Graphics::renderSprite(unsigned int spriteID)
