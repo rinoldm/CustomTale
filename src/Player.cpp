@@ -5,14 +5,10 @@ extern Game         game;
 extern Json::Value  data;
 extern Graphics     graphics;
 
-Player::Player(int posX, int posY) : posX(posX), posY(posY)
+Player::Player(int posX, int posY) : posX(posX), posY(posY), speed(5)
 {
-    this->states.resize(5, 0);
-    this->states[canMove]       = true;
-    this->states[isGoingLeft]   = false;
-    this->states[isGoingRight]  = false;
-    this->states[isGoingUp]     = false;
-    this->states[isGoingDown]   = false;
+    this->states.resize(1, 0);
+    this->states[canMove] = true;
 }
 
 void Player::initSprites()
@@ -47,50 +43,57 @@ void Player::move()
     if (this->states[canMove])
     {
         /*
-        if (this->states[isGoingLeft])  std::cout << "L"; else std::cout << " ";
-        if (this->states[isGoingRight]) std::cout << "R"; else std::cout << " ";
-        if (this->states[isGoingUp])    std::cout << "U"; else std::cout << " ";
-        if (this->states[isGoingDown])  std::cout << "D"; else std::cout << " ";
+        if (this->states[isPressingLeft])  std::cout << "L"; else std::cout << " ";
+        if (this->states[isPressingRight]) std::cout << "R"; else std::cout << " ";
+        if (this->states[isPressingUp])    std::cout << "U"; else std::cout << " ";
+        if (this->states[isPressingDown])  std::cout << "D"; else std::cout << " ";
+        if (this->states[isPressingSpace]) std::cout << "S"; else std::cout << " ";
         std::cout << std::endl;
         */
 
         // Erase last frame of walking animation
         graphics.getCurrentFrame(this->sprites[this->currentSprite]).isVisible = false;
 
+        // Gotta go fast
+        if (game.states[isPressingSpace])
+            this->speed = 10;
+        else
+            this->speed = 5;
+
         // Reset walking animation if not moving
-        if (this->states[isGoingLeft] == this->states[isGoingRight] &&
-            this->states[isGoingUp]   == this->states[isGoingDown])
+        if (game.states[isPressingLeft] == game.states[isPressingRight] &&
+            game.states[isPressingUp]   == game.states[isPressingDown])
             graphics.resetSprite(this->sprites[this->currentSprite]);
 
         // Left animation if walking left but not up/left or down/left
-        if (this->states[isGoingLeft])
+        if (game.states[isPressingLeft])
         {
-            this->posX -= 5;
-            if (!this->states[isGoingRight] && (this->states[isGoingUp] == this->states[isGoingDown]))
+            this->posX -= this->speed;
+            if (!game.states[isPressingRight] && (game.states[isPressingUp] == game.states[isPressingDown]))
                 this->animate(DIR_LEFT);
         }
 
         // Right animation if walking right but not up/right or down/right
-        if (this->states[isGoingRight])
+        if (game.states[isPressingRight])
         {
-            this->posX += 5;
-            if (!this->states[isGoingLeft] && (this->states[isGoingUp] == this->states[isGoingDown]))
+            this->posX += this->speed;
+            if (!game.states[isPressingLeft] && (game.states[isPressingUp] == game.states[isPressingDown]))
                 this->animate(DIR_RIGHT);
         }
 
         // Up animation if walking up, up/left or up/right
-        if (this->states[isGoingUp])
+        if (game.states[isPressingUp])
         {
-            this->posY -= 5;
-            if (!this->states[isGoingDown])
+            this->posY -= this->speed;
+            if (!game.states[isPressingDown])
                 this->animate(DIR_UP);
         }
 
         // Down animation if walking down, down/left or down/right
-        if (this->states[isGoingDown])
+        if (game.states[isPressingDown])
         {
-            this->posY += 5;
-            if (!this->states[isGoingUp])
+            this->posY += this->speed;
+            if (!game.states[isPressingUp])
                 this->animate(DIR_DOWN);
         }
 

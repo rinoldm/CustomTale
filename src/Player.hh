@@ -9,11 +9,7 @@
 
 enum
 {
-    canMove,
-    isGoingLeft,
-    isGoingRight,
-    isGoingUp,
-    isGoingDown
+    canMove
 };
 
 enum
@@ -29,6 +25,7 @@ class Player
     public:
         int posX;
         int posY;
+        int speed;
         std::vector<unsigned int> sprites;
         unsigned int currentSprite;
         std::vector<int> states;

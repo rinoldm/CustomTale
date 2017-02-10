@@ -63,21 +63,23 @@ void Graphics::getInput()
         case SDL_KEYDOWN:
             switch (this->event.key.keysym.sym)
             {
-                case SDLK_LEFT:   game.player.states[isGoingLeft]  = true; break;
-                case SDLK_RIGHT:  game.player.states[isGoingRight] = true; break;
-                case SDLK_UP:     game.player.states[isGoingUp]    = true; break;
-                case SDLK_DOWN:   game.player.states[isGoingDown]  = true; break;
-                case SDLK_ESCAPE: game.states[isQuitting]          = true; break;
+                case SDLK_LEFT:   game.states[isPressingLeft]  = true; break;
+                case SDLK_RIGHT:  game.states[isPressingRight] = true; break;
+                case SDLK_UP:     game.states[isPressingUp]    = true; break;
+                case SDLK_DOWN:   game.states[isPressingDown]  = true; break;
+                case SDLK_SPACE:  game.states[isPressingSpace] = true; break;
+                case SDLK_ESCAPE: game.states[isQuitting]      = true; break;
             }
             break;
 
         case SDL_KEYUP:
             switch (this->event.key.keysym.sym)
             {
-                case SDLK_LEFT:   game.player.states[isGoingLeft]  = false; break;
-                case SDLK_RIGHT:  game.player.states[isGoingRight] = false; break;
-                case SDLK_UP:     game.player.states[isGoingUp]    = false; break;
-                case SDLK_DOWN:   game.player.states[isGoingDown]  = false; break;
+                case SDLK_LEFT:   game.states[isPressingLeft]  = false; break;
+                case SDLK_RIGHT:  game.states[isPressingRight] = false; break;
+                case SDLK_UP:     game.states[isPressingUp]    = false; break;
+                case SDLK_DOWN:   game.states[isPressingDown]  = false; break;
+                case SDLK_SPACE:  game.states[isPressingSpace] = false; break;
             }
             break;
         }

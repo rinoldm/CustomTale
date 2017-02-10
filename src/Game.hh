@@ -9,6 +9,11 @@
 enum
 {
     isQuitting,
+    isPressingLeft,
+    isPressingRight,
+    isPressingUp,
+    isPressingDown,
+    isPressingSpace
 };
 
 class Game
