@@ -2,7 +2,7 @@
 
 extern Graphics graphics;
 
-Game::Game() : player(0, 0)
+Game::Game() : player(60, 60)
 {
     this->states.resize(1, 0);
     this->states[isQuitting] = false;

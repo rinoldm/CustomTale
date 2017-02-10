@@ -86,32 +86,7 @@ void Graphics::getInput()
 
 unsigned int Graphics::loadSprite(std::vector<std::string> filenames, int posX, int posY, double scaleFactor, bool isVisible, bool isAnimated)
 {
-    Sprite sprite;
-
-    for (unsigned int i = 0; i < filenames.size(); ++i)
-    {
-        Frame frame;
-
-        frame.image = IMG_Load(("sprites/" + filenames[i]).c_str());
-        if (frame.image == NULL)
-            exit(-1);
-
-        frame.texture = SDL_CreateTextureFromSurface(this->renderer, frame.image);
-        if (frame.texture == NULL)
-            exit(-1);
-
-        frame.name = filenames[i];
-        frame.sizeX = scaleFactor * frame.image->w;
-        frame.sizeY = scaleFactor * frame.image->h;
-        frame.posX = posX;
-        frame.posY = posY;
-        frame.isVisible = false;
-
-        sprite.frames.push_back(frame);
-    }
-    sprite.frames[0].isVisible = isVisible;
-    sprite.currentFrame = 0;
-    sprite.isAnimated = isAnimated;
+    Sprite sprite(filenames, posX, posY, scaleFactor, isVisible, isAnimated);
     this->sprites.insert(std::pair<unsigned int, Sprite>(++this->lastSpriteID, sprite));
     return (this->lastSpriteID);
 }
@@ -126,7 +101,10 @@ unsigned int Graphics::loadSprite(std::string filename, int posX, int posY, doub
 void Graphics::initBackground()
 {
     this->loadSprite("spr_undertaletitle_0.png", 0, 0, 2);
-    this->loadSprite(game.jsonToStrings(data["Player"]["sprites"]["walkingDown"]), 20, 20, 2, true, true);
+    this->loadSprite(game.jsonToStrings(data["Player"]["sprites"]["walkingDown"]),  100,  20, 2, true, true);
+    this->loadSprite(game.jsonToStrings(data["Player"]["sprites"]["walkingUp"]),     20, 100, 2, true, true);
+    this->loadSprite(game.jsonToStrings(data["Player"]["sprites"]["walkingLeft"]),  100, 100, 2, true, true);
+    this->loadSprite(game.jsonToStrings(data["Player"]["sprites"]["walkingRight"]),  20,  20, 2, true, true);
 }
 
 void Graphics::renderSprite(unsigned int spriteID)
@@ -152,7 +130,6 @@ void Graphics::render()
         }
         this->renderSprite(i);
     }
-
     SDL_RenderPresent(this->renderer);
 }
 

@@ -1,6 +1,8 @@
 #ifndef __SPRITE_HH__
 #define __SPRITE_HH__
 
+#include <string>
+#include <vector>
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 
@@ -22,6 +24,9 @@ class Sprite
         std::vector<Frame> frames;
         unsigned int currentFrame;
         bool isAnimated;
+
+        Sprite(){};
+        Sprite(std::vector<std::string>, int, int, double, bool, bool);
 };
 
 #endif
