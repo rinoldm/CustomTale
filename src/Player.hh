@@ -4,7 +4,7 @@
 #include <iostream>
 #include <fstream>
 
-//#include "Graphics.hh"
+#include "Entity.hh"
 #include "../lib/jsoncpp/json/json.h"
 
 enum
@@ -12,28 +12,13 @@ enum
     canMove
 };
 
-enum
-{
-    DIR_DOWN,
-    DIR_UP,
-    DIR_LEFT,
-    DIR_RIGHT
-};
-
-class Player
+class Player : public Entity
 {
     public:
-        int posX;
-        int posY;
         int speed;
-        std::vector<unsigned int> sprites;
-        unsigned int currentSprite;
-        std::vector<int> states;
 
-        Player(int, int);
-        void initSprites();
-        void animate(unsigned int);
-        void move();
+        Player(int, int, std::string);
+        void update();
 };
 
 #endif

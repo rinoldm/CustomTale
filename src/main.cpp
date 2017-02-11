@@ -29,13 +29,13 @@ int main(int ac, char **av)
 
     graphics.initBackground();
     //graphics.initMap();
-    game.player.initSprites();
+    game.player.loadSprites();
     //debugDisplaySprites();
 
     while (!game.states[isQuitting])
     {
         graphics.getInput();
-        game.move();
+        game.update();
         graphics.render();
         SDL_Delay(1000 / graphics.fps);
     }

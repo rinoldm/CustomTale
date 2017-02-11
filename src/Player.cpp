@@ -5,40 +5,13 @@ extern Game         game;
 extern Json::Value  data;
 extern Graphics     graphics;
 
-Player::Player(int posX, int posY) : posX(posX), posY(posY), speed(5)
+Player::Player(int posX, int posY, std::string initialSprite) : Entity("Player", posX, posY, initialSprite, 2), speed(5)
 {
     this->states.resize(1, 0);
     this->states[canMove] = true;
 }
 
-void Player::initSprites()
-{
-    Json::Value sprites = data["Player"]["sprites"];
-
-    this->sprites.resize(4, -1);
-    this->sprites[DIR_DOWN]  = graphics.loadSprite(game.jsonToStrings(sprites["charaWalkingDown"]),  this->posX, this->posY, 2);
-    this->sprites[DIR_UP]    = graphics.loadSprite(game.jsonToStrings(sprites["charaWalkingUp"]),    this->posX, this->posY, 2, false);
-    this->sprites[DIR_LEFT]  = graphics.loadSprite(game.jsonToStrings(sprites["charaWalkingLeft"]),  this->posX, this->posY, 2, false);
-    this->sprites[DIR_RIGHT] = graphics.loadSprite(game.jsonToStrings(sprites["charaWalkingRight"]), this->posX, this->posY, 2, false);
-}
-
-void Player::animate(unsigned int spriteID)
-{
-    if (this->currentSprite == spriteID) // Already walking in that direction
-    {
-        // Advance one frame and reset if last frame
-        if (++graphics.getSprite(this->sprites[this->currentSprite]).currentFrame == graphics.getSprite(this->sprites[this->currentSprite]).frames.size())
-            graphics.resetSprite(this->sprites[this->currentSprite]);
-    }
-    else // Just changed direction
-    {
-        // Set animation to first frame of correct direction
-        this->currentSprite = spriteID;
-        graphics.resetSprite(this->sprites[this->currentSprite]);
-    }
-}
-
-void Player::move()
+void Player::update()
 {
     if (this->states[canMove])
     {
@@ -70,7 +43,7 @@ void Player::move()
         {
             this->posX -= this->speed;
             if (!game.states[isPressingRight] && (game.states[isPressingUp] == game.states[isPressingDown]))
-                this->animate(DIR_LEFT);
+                this->animate("charaWalkingLeft");
         }
 
         // Right animation if walking right but not up/right or down/right
@@ -78,7 +51,7 @@ void Player::move()
         {
             this->posX += this->speed;
             if (!game.states[isPressingLeft] && (game.states[isPressingUp] == game.states[isPressingDown]))
-                this->animate(DIR_RIGHT);
+                this->animate("charaWalkingRight");
         }
 
         // Up animation if walking up, up/left or up/right
@@ -86,7 +59,7 @@ void Player::move()
         {
             this->posY -= this->speed;
             if (!game.states[isPressingDown])
-                this->animate(DIR_UP);
+                this->animate("charaWalkingUp");
         }
 
         // Down animation if walking down, down/left or down/right
@@ -94,7 +67,7 @@ void Player::move()
         {
             this->posY += this->speed;
             if (!game.states[isPressingUp])
-                this->animate(DIR_DOWN);
+                this->animate("charaWalkingDown");
         }
 
         // Update position of current frame of animation

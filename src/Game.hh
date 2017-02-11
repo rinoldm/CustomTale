@@ -25,7 +25,7 @@ class Game
     Game();
 
     std::vector<std::string> jsonToStrings(Json::Value json);
-    void move();
+    void update();
 };
 
 #endif

@@ -2,7 +2,7 @@
 
 extern Graphics graphics;
 
-Game::Game() : player(220, 20)
+Game::Game() : player(220, 20, "charaWalkingDown")
 {
     this->states.resize(6, 0);
     this->states[isQuitting]        = false;
@@ -21,7 +21,7 @@ std::vector<std::string> Game::jsonToStrings(Json::Value json)
     return (strings);
 }
 
-void Game::move()
+void Game::update()
 {
-    this->player.move();
+    this->player.update();
 }
