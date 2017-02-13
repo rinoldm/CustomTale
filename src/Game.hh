@@ -8,12 +8,7 @@
 
 enum
 {
-    isQuitting,
-    isPressingLeft,
-    isPressingRight,
-    isPressingUp,
-    isPressingDown,
-    isPressingSpace
+    isQuitting
 };
 
 class Game
@@ -25,6 +20,7 @@ class Game
     Game();
 
     std::vector<std::string> jsonToStrings(Json::Value json);
+    void handleInput();
     void update();
 };
 

@@ -19,6 +19,7 @@ class Graphics
         int windowY;
         std::string windowTitle;
         SDL_Event event;
+        std::map<SDL_Keycode, bool> keydown;
         int fps;
         SDL_Renderer *renderer;
         std::map<unsigned int, Sprite> sprites;

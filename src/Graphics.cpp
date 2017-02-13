@@ -54,35 +54,8 @@ void Graphics::getInput()
 {
     while (SDL_PollEvent(&this->event) && !game.states[isQuitting])
     {
-        switch (this->event.type)
-        {
-        case SDL_QUIT:
-            game.states[isQuitting] = true;
-            break;
-
-        case SDL_KEYDOWN:
-            switch (this->event.key.keysym.sym)
-            {
-                case SDLK_LEFT:   game.states[isPressingLeft]  = true; break;
-                case SDLK_RIGHT:  game.states[isPressingRight] = true; break;
-                case SDLK_UP:     game.states[isPressingUp]    = true; break;
-                case SDLK_DOWN:   game.states[isPressingDown]  = true; break;
-                case SDLK_SPACE:  game.states[isPressingSpace] = true; break;
-                case SDLK_ESCAPE: game.states[isQuitting]      = true; break;
-            }
-            break;
-
-        case SDL_KEYUP:
-            switch (this->event.key.keysym.sym)
-            {
-                case SDLK_LEFT:   game.states[isPressingLeft]  = false; break;
-                case SDLK_RIGHT:  game.states[isPressingRight] = false; break;
-                case SDLK_UP:     game.states[isPressingUp]    = false; break;
-                case SDLK_DOWN:   game.states[isPressingDown]  = false; break;
-                case SDLK_SPACE:  game.states[isPressingSpace] = false; break;
-            }
-            break;
-        }
+        game.states[isQuitting] = (this->event.type == SDL_QUIT);
+        this->keydown[this->event.key.keysym.sym] = (this->event.type == SDL_KEYDOWN);
     }
 }
 
@@ -103,18 +76,7 @@ unsigned int Graphics::loadSprite(std::string filename, int posX, int posY, doub
 void Graphics::initBackground()
 {
     this->loadSprite("spr_undertaletitle_0.png", 0, 0, 2);
-
-    std::vector<std::string> chara;
-    for (int i = 0; i < 300; ++i)
-        chara.push_back("spr_truechara_0.png");
-    for (int i = 0; i < 30; ++i)
-        chara.push_back("spr_truechara_weird_0.png");
-    this->loadSprite(chara, 400, 300, 12, true, true);
-
-    for (int i = 0; i < 60; ++i)
-    {
-        this->loadSprite(game.jsonToStrings(data["Player"]["sprites"]["walkingDown"]),  20 + 40 * (i / 10),  20 + 60 * (i % 10), 2, true, true);
-    }
+    this->loadSprite(game.jsonToStrings(data["Player"]["sprites"]["walkingDown"]), 20, 20, 2, true, true);
 }
 
 void Graphics::renderSprite(unsigned int spriteID)

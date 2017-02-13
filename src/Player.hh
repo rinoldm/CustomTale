@@ -9,7 +9,12 @@
 
 enum
 {
-    canMove
+    canMove,
+    isWalkingLeft,
+    isWalkingRight,
+    isWalkingUp,
+    isWalkingDown,
+    isRunning
 };
 
 class Player : public Entity

@@ -35,6 +35,7 @@ int main(int ac, char **av)
     while (!game.states[isQuitting])
     {
         graphics.getInput();
+        game.handleInput();
         game.update();
         graphics.render();
         SDL_Delay(1000 / graphics.fps);
