@@ -3,14 +3,15 @@
 extern Game         game;
 extern Json::Value  data;
 
-Graphics::Graphics(int winX, int winY, const std::string &winTitle) :
-    windowX(winX),
-    windowY(winY),
-    windowTitle(winTitle),
-    fps(30),
-    lastSpriteID(-1)
+Graphics::Graphics(int winX, int winY, const std::string &winTitle)
 {
-    this->init();
+    this->windowX = winX;
+    this->windowY = winY;
+    this->windowTitle = winTitle;
+    this->fps = 30;
+    this->lastSpriteID = -1;
+
+    this->initWindow();
 }
 
 void Graphics::error(const std::string &msg)
@@ -19,7 +20,7 @@ void Graphics::error(const std::string &msg)
         std::cerr << "SDL error : " << msg << std::endl;
 }
 
-void Graphics::init()
+void Graphics::initWindow()
 {
     if (SDL_Init(SDL_INIT_EVERYTHING) < 0)
         exit(-1);

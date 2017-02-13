@@ -5,8 +5,10 @@ extern Game         game;
 extern Json::Value  data;
 extern Graphics     graphics;
 
-Player::Player(int posX, int posY, std::string initialSprite) : Entity("Player", posX, posY, initialSprite, 2), speed(5)
+Player::Player(int posX, int posY, std::string initialSprite) : Entity("Player", posX, posY, initialSprite, 2)
 {
+    this->speed = 5;
+
     this->states.resize(6, 0);
     this->states[canMove]           = true;
     this->states[isWalkingLeft]     = false;

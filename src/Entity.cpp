@@ -5,9 +5,13 @@ extern Game         game;
 extern Json::Value  data;
 extern Graphics     graphics;
 
-Entity::Entity(std::string name, int posX, int posY, std::string initialSprite, double scaleFactor) : name(name), posX(posX), posY(posY), currentSprite(initialSprite), scaleFactor(scaleFactor)
+Entity::Entity(std::string name, int posX, int posY, std::string initialSprite, double scaleFactor)
 {
-
+    this->name = name;
+    this->posX = posX;
+    this->posY = posY;
+    this->currentSprite = initialSprite;
+    this->scaleFactor = scaleFactor;
 }
 
 void Entity::loadSprites()

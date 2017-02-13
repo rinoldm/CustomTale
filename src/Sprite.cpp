@@ -3,8 +3,11 @@
 
 extern Graphics graphics;
 
-Sprite::Sprite(std::vector<std::string> filenames, int posX, int posY, double scaleFactor, bool isVisible, bool isAnimated) : currentFrame(0), isAnimated(isAnimated)
+Sprite::Sprite(std::vector<std::string> filenames, int posX, int posY, double scaleFactor, bool isVisible, bool isAnimated)
 {
+    this->currentFrame = 0;
+    this->isAnimated = isAnimated;
+
     for (unsigned int i = 0; i < filenames.size(); ++i)
     {
         Frame frame;

@@ -27,7 +27,7 @@ class Graphics
 
     Graphics(int, int, const std::string &);
     void    error(const std::string &);
-    void    init();
+    void    initWindow();
     void    resetSprite(unsigned int);
     Sprite  &getSprite(unsigned int);
     Frame   &getCurrentFrame(unsigned int);
