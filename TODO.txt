@@ -1,0 +1,22 @@
+- Style / design :
+	- Singleton pattern for Graphics
+	- State pattern for SDL events (measure performance improvement)
+	- Stop making everything public members
+	
+- Graphics :
+	- Sprite depth / rendering order
+	- Spritesheets for map tiles
+	- Texts
+	- Menus
+	
+- Sound
+	
+- Gameplay :
+	- Maps
+	- Save system
+	- Movement limited by the tiles
+	- Collision with tiles and entities
+	- Item management
+	- NPCs
+	- Dialogue
+	- Map scripting
