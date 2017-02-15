@@ -27,6 +27,7 @@ class Sprite
 
         Sprite(){};
         Sprite(std::vector<std::string>, int, int, double, bool, bool);
+        Frame loadFrame(std::string, int, int, double);
 };
 
 #endif
