@@ -1,7 +1,6 @@
 #include "Entity.hh"
 #include "Graphics.hh"
 
-
 extern Game         game;
 extern Json::Value  data;
 extern Graphics     graphics;

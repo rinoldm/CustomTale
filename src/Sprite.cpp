@@ -8,8 +8,6 @@ Sprite::Sprite(std::vector<std::string> filenames, int posX, int posY, double sc
     this->stopped = true;
     for (unsigned int i = 0; i < filenames.size(); ++i)
         this->frames.push_back(this->loadFrame(filenames[i], scaleFactor, 1));
-    this->frameCount = 0;
-    this->frameDelay = 0;
     this->currentFrame = 0;
     this->totalFrames = this->frames.size();
     this->posX = posX;
@@ -37,52 +35,18 @@ Frame Sprite::loadFrame(std::string filename, double scaleFactor, int duration)
     return (frame);
 }
 
-void Sprite::start()
-{
-    if (!this->stopped || !this->totalFrames)
-        return;
-    this->stopped = false;
-}
-
-void Sprite::stop()
-{
-    if (!this->totalFrames)
-        return;
-    this->stopped = true;
-}
-
-void Sprite::restart()
-{
-    if (!this->totalFrames)
-        return;
-    this->stopped = false;
-    this->currentFrame = 0;
-}
-
-void Sprite::reset()
-{
-    this->stopped = true;
-    this->frameCount = 0;
-    this->currentFrame = 0;
-}
-
 Frame &Sprite::getCurrentFrame()
 {
     return (this->frames[this->currentFrame]);
 }
 
+void Sprite::start()   { this->stopped = false; }
+void Sprite::stop()    { this->stopped = true;  }
+void Sprite::restart() { this->stopped = false; this->currentFrame = 0; }
+void Sprite::reset()   { this->stopped = true;  this->currentFrame = 0; }
+
 void Sprite::update()
 {
-    if (!this->stopped)
-    {
-        this->frameCount++;
-        if (this->frameCount > this->frameDelay)
-        {
-            this->frameCount = 0;
-            this->currentFrame++;
-
-            if (this->currentFrame >= this->totalFrames)
-                this->currentFrame = 0;
-        }
-    }
+    if (!this->stopped && ++this->currentFrame >= this->totalFrames)
+        this->currentFrame = 0;
 }

@@ -20,8 +20,6 @@ class Sprite
 {
     public:
         std::vector<Frame> frames;
-        unsigned int frameCount;
-        unsigned int frameDelay;
         unsigned int currentFrame;
         unsigned int totalFrames;
         bool stopped;
