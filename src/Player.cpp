@@ -31,23 +31,20 @@ void Player::update()
         std::cout << std::endl;
         */
 
-        // Erase last frame of walking animation
-        graphics.getCurrentFrame(this->sprites[this->currentSprite]).isVisible = false;
-
         // Gotta go fast
         this->speed = (this->states[isRunning] ? 10 : 5);
 
         // Reset walking animation if not moving
         if (this->states[isWalkingLeft] == this->states[isWalkingRight] &&
             this->states[isWalkingUp]   == this->states[isWalkingDown])
-            graphics.resetSprite(this->sprites[this->currentSprite]);
+            this->getCurrentSprite().reset();
 
         // Left animation if walking left but not up/left or down/left
         if (this->states[isWalkingLeft])
         {
             this->posX -= this->speed;
             if (!this->states[isWalkingRight] && (this->states[isWalkingUp] == this->states[isWalkingDown]))
-                this->animate("walkingLeft");
+                this->changeSpriteTo("walkingLeft");
         }
 
         // Right animation if walking right but not up/right or down/right
@@ -55,7 +52,7 @@ void Player::update()
         {
             this->posX += this->speed;
             if (!this->states[isWalkingLeft] && (this->states[isWalkingUp] == this->states[isWalkingDown]))
-                this->animate("walkingRight");
+                this->changeSpriteTo("walkingRight");
         }
 
         // Up animation if walking up, up/left or up/right
@@ -63,7 +60,7 @@ void Player::update()
         {
             this->posY -= this->speed;
             if (!this->states[isWalkingDown])
-                this->animate("walkingUp");
+                this->changeSpriteTo("walkingUp");
         }
 
         // Down animation if walking down, down/left or down/right
@@ -71,12 +68,11 @@ void Player::update()
         {
             this->posY += this->speed;
             if (!this->states[isWalkingUp])
-                this->animate("walkingDown");
+                this->changeSpriteTo("walkingDown");
         }
 
         // Update position of current frame of animation
-        graphics.getCurrentFrame(this->sprites[this->currentSprite]).posX = this->posX;
-        graphics.getCurrentFrame(this->sprites[this->currentSprite]).posY = this->posY;
-        graphics.getCurrentFrame(this->sprites[this->currentSprite]).isVisible = true;
+        this->getCurrentSprite().posX = this->posX;
+        this->getCurrentSprite().posY = this->posY;
     }
 }

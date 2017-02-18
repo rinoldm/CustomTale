@@ -36,21 +36,6 @@ void Graphics::initWindow()
     IMG_Init(IMG_INIT_JPG | IMG_INIT_PNG);
 }
 
-void Graphics::resetSprite(unsigned int spriteID)
-{
-    this->sprites[spriteID].currentFrame = 0;
-}
-
-Sprite &Graphics::getSprite(unsigned int spriteID)
-{
-    return (this->sprites[spriteID]);
-}
-
-Frame &Graphics::getCurrentFrame(unsigned int spriteID)
-{
-    return (this->sprites[spriteID].frames[this->sprites[spriteID].currentFrame]);
-}
-
 void Graphics::getInput()
 {
     while (SDL_PollEvent(&this->event) && !game.states[isQuitting])
@@ -60,33 +45,34 @@ void Graphics::getInput()
     }
 }
 
-unsigned int Graphics::loadSprite(std::vector<std::string> filenames, int posX, int posY, double scaleFactor, bool isVisible, bool isAnimated)
+unsigned int Graphics::loadSprite(std::vector<std::string> filenames, int posX, int posY, double scaleFactor, bool isVisible = true)
 {
-    Sprite sprite(filenames, posX, posY, scaleFactor, isVisible, isAnimated);
-    this->sprites.insert(std::pair<unsigned int, Sprite>(++this->lastSpriteID, sprite));
+    Sprite sprite(filenames, posX, posY, scaleFactor, isVisible);
+    this->sprites.insert({++this->lastSpriteID, sprite});
+    if (isVisible)
+        this->sprites[this->lastSpriteID].start();
     return (this->lastSpriteID);
 }
 
-unsigned int Graphics::loadSprite(std::string filename, int posX, int posY, double scaleFactor, bool isVisible, bool isAnimated)
+unsigned int Graphics::loadSprite(std::string filename, int posX, int posY, double scaleFactor, bool isVisible = true)
 {
     std::vector<std::string> filenames;
     filenames.push_back(filename);
-    return (this->loadSprite(filenames, posX, posY, scaleFactor, isVisible, isAnimated));
+    return (this->loadSprite(filenames, posX, posY, scaleFactor, isVisible));
 }
 
 void Graphics::initBackground()
 {
     this->loadSprite("spr_undertaletitle_0.png", 0, 0, 2);
-    this->loadSprite(game.jsonToStrings(data["Player"]["sprites"]["walkingDown"]), 20, 20, 2, true, true);
+    this->loadSprite(game.jsonToStrings(data["Player"]["sprites"]["walkingDown"]), 250, 60, 2);
 }
 
-void Graphics::renderSprite(unsigned int spriteID)
+void Graphics::renderSprite(Sprite sprite)
 {
-    Frame frame = this->sprites[spriteID].frames[this->sprites[spriteID].currentFrame];
-
-    if (frame.isVisible)
+    if (sprite.isVisible)
     {
-        SDL_Rect rect = {frame.posX, frame.posY, frame.sizeX, frame.sizeY};
+        Frame frame = sprite.getCurrentFrame();
+        SDL_Rect rect = {sprite.posX, sprite.posY, frame.sizeX, frame.sizeY};
         SDL_RenderCopy(this->renderer, frame.texture, NULL, &rect);
     }
 }
@@ -95,13 +81,8 @@ void Graphics::render()
 {
     for (unsigned int i = 0; i < this->sprites.size(); ++i)
     {
-        if (this->getSprite(i).isAnimated)
-        {
-            if (++this->getSprite(i).currentFrame == this->getSprite(i).frames.size())
-                this->resetSprite(i);
-            this->getCurrentFrame(i).isVisible = true;
-        }
-        this->renderSprite(i);
+        this->sprites[i].update();
+        this->renderSprite(this->sprites[i]);
     }
     SDL_RenderPresent(this->renderer);
 }

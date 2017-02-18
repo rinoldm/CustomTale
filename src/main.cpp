@@ -11,10 +11,7 @@ void debugDisplaySprites()
 {
     for (auto i = graphics.sprites.begin(); i != graphics.sprites.end(); ++i)
     {
-        std::cout << "  " << i->first;
-        if (i->second.isAnimated)
-            std::cout << " (animated)";
-        std::cout << std::endl;
+        std::cout << "  " << i->first << std::endl;
         for (unsigned int j = 0; j < i->second.frames.size(); ++j)
             std::cout << "    " << j << " " <<i->second.frames[j].name << std::endl;
     }

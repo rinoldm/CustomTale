@@ -4,6 +4,8 @@
 #include <vector>
 #include <map>
 
+#include "Sprite.hh"
+
 class Entity
 {
     public:
@@ -18,7 +20,8 @@ class Entity
 
         Entity(std::string, int, int, std::string, double);
         void loadSprites();
-        void animate(std::string);
+        Sprite &getCurrentSprite();
+        void changeSpriteTo(const std::string &);
 };
 
 #endif

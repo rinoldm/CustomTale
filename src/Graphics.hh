@@ -28,15 +28,12 @@ class Graphics
     Graphics(int, int, const std::string &);
     void    error(const std::string &);
     void    initWindow();
-    void    resetSprite(unsigned int);
-    Sprite  &getSprite(unsigned int);
-    Frame   &getCurrentFrame(unsigned int);
     void    getInput();
-    unsigned int loadSprite(std::vector<std::string>, int, int, double, bool = true, bool = false);
-    unsigned int loadSprite(std::string, int, int, double, bool = true, bool = false);
+    unsigned int loadSprite(std::vector<std::string>, int, int, double, bool);
+    unsigned int loadSprite(            std::string , int, int, double, bool);
     void    initBackground();
 
-    void    renderSprite(unsigned int);
+    void    renderSprite(Sprite);
     void    render();
     void    quit();
 };

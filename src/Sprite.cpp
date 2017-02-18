@@ -3,17 +3,21 @@
 
 extern Graphics graphics;
 
-Sprite::Sprite(std::vector<std::string> filenames, int posX, int posY, double scaleFactor, bool isVisible, bool isAnimated)
+Sprite::Sprite(std::vector<std::string> filenames, int posX, int posY, double scaleFactor, bool isVisible)
 {
-    this->currentFrame = 0;
-    this->isAnimated = isAnimated;
-
+    this->stopped = true;
     for (unsigned int i = 0; i < filenames.size(); ++i)
-        this->frames.push_back(this->loadFrame(filenames[i], posX, posY, scaleFactor));
-    this->frames[0].isVisible = isVisible;
+        this->frames.push_back(this->loadFrame(filenames[i], scaleFactor, 1));
+    this->frameCount = 0;
+    this->frameDelay = 0;
+    this->currentFrame = 0;
+    this->totalFrames = this->frames.size();
+    this->posX = posX;
+    this->posY = posY;
+    this->isVisible = isVisible;
 }
 
-Frame Sprite::loadFrame(std::string filename, int posX, int posY, double scaleFactor)
+Frame Sprite::loadFrame(std::string filename, double scaleFactor, int duration)
 {
     Frame frame;
 
@@ -28,9 +32,57 @@ Frame Sprite::loadFrame(std::string filename, int posX, int posY, double scaleFa
     frame.name = filename;
     frame.sizeX = scaleFactor * frame.image->w;
     frame.sizeY = scaleFactor * frame.image->h;
-    frame.posX = posX;
-    frame.posY = posY;
-    frame.isVisible = false;
+    frame.duration = duration;
 
     return (frame);
+}
+
+void Sprite::start()
+{
+    if (!this->stopped || !this->totalFrames)
+        return;
+    this->stopped = false;
+}
+
+void Sprite::stop()
+{
+    if (!this->totalFrames)
+        return;
+    this->stopped = true;
+}
+
+void Sprite::restart()
+{
+    if (!this->totalFrames)
+        return;
+    this->stopped = false;
+    this->currentFrame = 0;
+}
+
+void Sprite::reset()
+{
+    this->stopped = true;
+    this->frameCount = 0;
+    this->currentFrame = 0;
+}
+
+Frame &Sprite::getCurrentFrame()
+{
+    return (this->frames[this->currentFrame]);
+}
+
+void Sprite::update()
+{
+    if (!this->stopped)
+    {
+        this->frameCount++;
+        if (this->frameCount > this->frameDelay)
+        {
+            this->frameCount = 0;
+            this->currentFrame++;
+
+            if (this->currentFrame >= this->totalFrames)
+                this->currentFrame = 0;
+        }
+    }
 }

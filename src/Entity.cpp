@@ -1,6 +1,7 @@
 #include "Entity.hh"
 #include "Graphics.hh"
 
+
 extern Game         game;
 extern Json::Value  data;
 extern Graphics     graphics;
@@ -21,20 +22,22 @@ void Entity::loadSprites()
 
     for (unsigned int i = 0; i < spriteNames.size(); ++i)
         this->sprites[spriteNames[i]] = graphics.loadSprite(game.jsonToStrings(sprites[spriteNames[i]]), this->posX, this->posY, this->scaleFactor, false);
+    this->getCurrentSprite().isVisible = true;
 }
 
-void Entity::animate(std::string spriteID)
+Sprite &Entity::getCurrentSprite()
 {
-    if (this->currentSprite == spriteID) // Already walking in that direction
+    return (graphics.sprites[this->sprites[this->currentSprite]]);
+}
+
+void Entity::changeSpriteTo(const std::string &sprite)
+{
+    if (this->currentSprite != sprite)
     {
-        // Advance one frame and reset if last frame
-        if (++graphics.getSprite(this->sprites[this->currentSprite]).currentFrame == graphics.getSprite(this->sprites[this->currentSprite]).frames.size())
-            graphics.resetSprite(this->sprites[this->currentSprite]);
+        this->getCurrentSprite().reset();
+        this->getCurrentSprite().isVisible = false;
+        this->currentSprite = sprite;
+        this->getCurrentSprite().isVisible = true;
     }
-    else // Just changed direction
-    {
-        // Set animation to first frame of correct direction
-        this->currentSprite = spriteID;
-        graphics.resetSprite(this->sprites[this->currentSprite]);
-    }
+    this->getCurrentSprite().start();
 }
