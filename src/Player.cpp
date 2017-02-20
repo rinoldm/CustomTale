@@ -5,9 +5,9 @@ extern Game         game;
 extern Json::Value  data;
 extern Graphics     graphics;
 
-Player::Player(int posX, int posY, std::string initialSprite) : Entity("Player", posX, posY, initialSprite, 2)
+Player::Player(double posX, double posY, std::string initialSprite) : Entity("Player", posX, posY, initialSprite, 1)
 {
-    this->speed = 5;
+    this->speed = 2.5;
 
     this->states.resize(6, 0);
     this->states[canMove]           = true;
@@ -32,7 +32,7 @@ void Player::update()
         */
 
         // Gotta go fast
-        this->speed = (this->states[isRunning] ? 10 : 5);
+        this->speed = (this->states[isRunning] ? 5 : 2.5);
 
         // Reset walking animation if not moving
         if (this->states[isWalkingLeft] == this->states[isWalkingRight] &&

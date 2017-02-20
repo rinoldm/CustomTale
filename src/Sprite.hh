@@ -13,7 +13,6 @@ typedef struct
     std::string name;
     int sizeX;
     int sizeY;
-    int duration;
 } Frame;
 
 class Sprite
@@ -23,13 +22,13 @@ class Sprite
         unsigned int currentFrame;
         unsigned int totalFrames;
         bool stopped;
-        int posX;
-        int posY;
+        double posX;
+        double posY;
         bool isVisible;
 
         Sprite(){};
-        Sprite(std::vector<std::string>, int, int, double, bool);
-        Frame loadFrame(std::string, double, int);
+        Sprite(std::vector<std::string>, double, double, bool, double);
+        Frame loadFrame(std::string, double);
         Frame &getCurrentFrame();
         void start();
         void stop();

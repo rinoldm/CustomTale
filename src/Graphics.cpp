@@ -8,6 +8,7 @@ Graphics::Graphics(int winX, int winY, const std::string &winTitle)
     this->windowX = winX;
     this->windowY = winY;
     this->windowTitle = winTitle;
+    this->globalScaling = 2;
     this->fps = 30;
     this->lastSpriteID = -1;
 
@@ -33,6 +34,7 @@ void Graphics::initWindow()
     if (this->renderer == NULL)
         exit(-1);
 
+    SDL_SetRenderDrawColor(this->renderer, 0, 0, 0, 255);
     IMG_Init(IMG_INIT_JPG | IMG_INIT_PNG);
 }
 
@@ -45,44 +47,46 @@ void Graphics::getInput()
     }
 }
 
-unsigned int Graphics::loadSprite(std::vector<std::string> filenames, int posX, int posY, double scaleFactor, bool isVisible = true)
+unsigned int Graphics::loadSprite(std::vector<std::string> filenames, double posX, double posY, bool isVisible = true, double scaling = 1)
 {
-    Sprite sprite(filenames, posX, posY, scaleFactor, isVisible);
+    Sprite sprite(filenames, posX, posY, isVisible, scaling);
     this->sprites.insert({++this->lastSpriteID, sprite});
     if (isVisible)
         this->sprites[this->lastSpriteID].start();
     return (this->lastSpriteID);
 }
 
-unsigned int Graphics::loadSprite(std::string filename, int posX, int posY, double scaleFactor, bool isVisible = true)
+unsigned int Graphics::loadSprite(std::string filename, double posX, double posY, bool isVisible = true, double scaling = 1)
 {
     std::vector<std::string> filenames;
     filenames.push_back(filename);
-    return (this->loadSprite(filenames, posX, posY, scaleFactor, isVisible));
+    return (this->loadSprite(filenames, posX, posY, isVisible, scaling));
 }
 
 void Graphics::initBackground()
 {
-    this->loadSprite("spr_undertaletitle_0.png", 0, 0, 2);
-    this->loadSprite(game.jsonToStrings(data["Player"]["sprites"]["walkingDown"]), 250, 60, 2);
-}
-
-void Graphics::renderSprite(Sprite sprite)
-{
-    if (sprite.isVisible)
-    {
-        Frame frame = sprite.getCurrentFrame();
-        SDL_Rect rect = {sprite.posX, sprite.posY, frame.sizeX, frame.sizeY};
-        SDL_RenderCopy(this->renderer, frame.texture, NULL, &rect);
-    }
+    this->loadSprite("spr_undertaletitle_0.png", 0, 0);
+    this->loadSprite(game.jsonToStrings(data["Player"]["sprites"]["walkingDown"]), 120, 60);
 }
 
 void Graphics::render()
 {
+    SDL_RenderClear(this->renderer);
     for (unsigned int i = 0; i < this->sprites.size(); ++i)
     {
-        this->sprites[i].update();
-        this->renderSprite(this->sprites[i]);
+        Sprite &sprite = this->sprites[i];
+        sprite.update();
+
+        if (sprite.isVisible)
+        {
+            Frame &frame = sprite.getCurrentFrame();
+            SDL_Rect rect =
+            {
+                (int) (globalScaling * sprite.posX), (int) (globalScaling * sprite.posY),
+                (int) (globalScaling * frame.sizeX), (int) (globalScaling * frame.sizeY)
+            };
+            SDL_RenderCopy(this->renderer, frame.texture, NULL, &rect);
+        }
     }
     SDL_RenderPresent(this->renderer);
 }

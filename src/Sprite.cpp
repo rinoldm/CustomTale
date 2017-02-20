@@ -3,11 +3,11 @@
 
 extern Graphics graphics;
 
-Sprite::Sprite(std::vector<std::string> filenames, int posX, int posY, double scaleFactor, bool isVisible)
+Sprite::Sprite(std::vector<std::string> filenames, double posX, double posY, bool isVisible, double scaling)
 {
     this->stopped = true;
     for (unsigned int i = 0; i < filenames.size(); ++i)
-        this->frames.push_back(this->loadFrame(filenames[i], scaleFactor, 1));
+        this->frames.push_back(this->loadFrame(filenames[i], scaling));
     this->currentFrame = 0;
     this->totalFrames = this->frames.size();
     this->posX = posX;
@@ -15,7 +15,7 @@ Sprite::Sprite(std::vector<std::string> filenames, int posX, int posY, double sc
     this->isVisible = isVisible;
 }
 
-Frame Sprite::loadFrame(std::string filename, double scaleFactor, int duration)
+Frame Sprite::loadFrame(std::string filename, double scaling)
 {
     Frame frame;
 
@@ -28,9 +28,8 @@ Frame Sprite::loadFrame(std::string filename, double scaleFactor, int duration)
         exit(-1);
 
     frame.name = filename;
-    frame.sizeX = scaleFactor * frame.image->w;
-    frame.sizeY = scaleFactor * frame.image->h;
-    frame.duration = duration;
+    frame.sizeX = scaling * frame.image->w;
+    frame.sizeY = scaling * frame.image->h;
 
     return (frame);
 }

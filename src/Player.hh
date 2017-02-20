@@ -20,9 +20,9 @@ enum
 class Player : public Entity
 {
     public:
-        int speed;
+        double speed;
 
-        Player(int, int, std::string);
+        Player(double, double, std::string);
         void update();
 };
 

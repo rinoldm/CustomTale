@@ -18,10 +18,12 @@ class Graphics
         int windowX;
         int windowY;
         std::string windowTitle;
+        double globalScaling;
         SDL_Event event;
         std::map<SDL_Keycode, bool> keydown;
         int fps;
         SDL_Renderer *renderer;
+
         std::map<unsigned int, Sprite> sprites;
         unsigned int lastSpriteID;
 
@@ -29,11 +31,10 @@ class Graphics
     void    error(const std::string &);
     void    initWindow();
     void    getInput();
-    unsigned int loadSprite(std::vector<std::string>, int, int, double, bool);
-    unsigned int loadSprite(            std::string , int, int, double, bool);
+    unsigned int loadSprite(std::vector<std::string>, double, double, bool, double);
+    unsigned int loadSprite(            std::string , double, double, bool, double);
     void    initBackground();
 
-    void    renderSprite(Sprite);
     void    render();
     void    quit();
 };

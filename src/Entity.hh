@@ -10,15 +10,15 @@ class Entity
 {
     public:
         std::string name;
-        int posX;
-        int posY;
+        double posX;
+        double posY;
 
         std::map<std::string, unsigned int> sprites;
         std::string currentSprite;
-        double scaleFactor;
+        double scaling;
         std::vector<int> states;
 
-        Entity(std::string, int, int, std::string, double);
+        Entity(std::string, double, double, std::string, double);
         void loadSprites();
         Sprite &getCurrentSprite();
         void changeSpriteTo(const std::string &);

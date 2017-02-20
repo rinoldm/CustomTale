@@ -5,13 +5,13 @@ extern Game         game;
 extern Json::Value  data;
 extern Graphics     graphics;
 
-Entity::Entity(std::string name, int posX, int posY, std::string initialSprite, double scaleFactor)
+Entity::Entity(std::string name, double posX, double posY, std::string initialSprite, double scaling = 1)
 {
     this->name = name;
     this->posX = posX;
     this->posY = posY;
     this->currentSprite = initialSprite;
-    this->scaleFactor = scaleFactor;
+    this->scaling = scaling;
 }
 
 void Entity::loadSprites()
@@ -20,7 +20,7 @@ void Entity::loadSprites()
     std::vector<std::string> spriteNames = sprites.getMemberNames();
 
     for (unsigned int i = 0; i < spriteNames.size(); ++i)
-        this->sprites[spriteNames[i]] = graphics.loadSprite(game.jsonToStrings(sprites[spriteNames[i]]), this->posX, this->posY, this->scaleFactor, false);
+        this->sprites[spriteNames[i]] = graphics.loadSprite(game.jsonToStrings(sprites[spriteNames[i]]), this->posX, this->posY, false, this->scaling);
     this->getCurrentSprite().isVisible = true;
 }
 
