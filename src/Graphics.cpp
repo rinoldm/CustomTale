@@ -56,16 +56,9 @@ unsigned int Graphics::loadSprite(std::vector<std::string> filenames, double pos
     return (this->lastSpriteID);
 }
 
-unsigned int Graphics::loadSprite(std::string filename, double posX, double posY, bool isVisible = true, double scaling = 1)
-{
-    std::vector<std::string> filenames;
-    filenames.push_back(filename);
-    return (this->loadSprite(filenames, posX, posY, isVisible, scaling));
-}
-
 void Graphics::initBackground()
 {
-    this->loadSprite("spr_undertaletitle_0.png", 0, 0);
+    this->loadSprite({"spr_undertaletitle_0.png"}, 0, 0);
     this->loadSprite(game.jsonToStrings(data["Player"]["sprites"]["walkingDown"]), 120, 60);
 }
 

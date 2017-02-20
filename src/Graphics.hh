@@ -32,7 +32,6 @@ class Graphics
     void    initWindow();
     void    getInput();
     unsigned int loadSprite(std::vector<std::string>, double, double, bool, double);
-    unsigned int loadSprite(            std::string , double, double, bool, double);
     void    initBackground();
 
     void    render();
