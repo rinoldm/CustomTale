@@ -3,9 +3,9 @@
 #include "Game.hh"
 #include "Graphics.hh"
 
-Game        game;
+Game        game("CustomTale");
 Json::Value data;
-Graphics    graphics(640, 480, "CustomTale");
+Graphics    graphics(640, 480, game.name);
 
 void debugDisplaySprites()
 {
@@ -21,7 +21,7 @@ int main(int ac, char **av)
 {
     atexit([]{graphics.quit();});
 
-    std::ifstream dataFile("project.json", std::ifstream::binary);
+    std::ifstream dataFile("data/" + game.name + "/project.json", std::ifstream::binary);
     dataFile >> data;
 
     graphics.initBackground();

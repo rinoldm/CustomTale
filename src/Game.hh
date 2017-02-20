@@ -14,10 +14,11 @@ enum
 class Game
 {
     public:
+        std::string name;
         std::vector<int> states;
         Player player;
 
-    Game();
+    Game(std::string name);
 
     std::vector<std::string> jsonToStrings(Json::Value json);
     void handleInput();

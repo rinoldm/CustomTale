@@ -2,8 +2,9 @@
 
 extern Graphics graphics;
 
-Game::Game() : player(220, 20, "walkingDown")
+Game::Game(std::string name) : player(220, 20, "walkingDown")
 {
+    this->name = name;
     this->states.resize(1, 0);
     this->states[isQuitting] = false;
 }

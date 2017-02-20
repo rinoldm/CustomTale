@@ -1,6 +1,7 @@
 #include "Sprite.hh"
 #include "Graphics.hh"
 
+extern Game     game;
 extern Graphics graphics;
 
 Sprite::Sprite(std::vector<std::string> filenames, double posX, double posY, bool isVisible, double scaling)
@@ -19,7 +20,7 @@ Frame Sprite::loadFrame(std::string filename, double scaling)
 {
     Frame frame;
 
-    frame.image = IMG_Load(("sprites/" + filename).c_str());
+    frame.image = IMG_Load(("data/" + game.name + "/sprites/" + filename).c_str());
     if (frame.image == NULL)
         exit(-1);
 
