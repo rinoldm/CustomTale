@@ -34,7 +34,9 @@ void Graphics::initWindow()
     if (this->renderer == NULL)
         exit(-1);
 
-    SDL_SetRenderDrawColor(this->renderer, 0, 0, 0, 255);
+    if (SDL_SetRenderDrawColor(this->renderer, 0, 0, 0, 255) < 0)
+        exit(-1);
+
     IMG_Init(IMG_INIT_JPG | IMG_INIT_PNG);
 }
 
@@ -73,11 +75,22 @@ void Graphics::render()
         if (sprite.isVisible)
         {
             Frame &frame = sprite.getCurrentFrame();
-            SDL_Rect rect =
-            {
-                (int) (globalScaling * sprite.posX), (int) (globalScaling * sprite.posY),
-                (int) (globalScaling * frame.sizeX), (int) (globalScaling * frame.sizeY)
-            };
+            SDL_Rect rect;
+
+            int halfScreenX = (this->windowX - 20) / 2; // todo adjust for map
+            int halfScreenY = (this->windowY - 20) / 2; // todo adjust for map
+            int spritePosX = (int) (this->globalScaling * sprite.posX);
+            int spritePosY = (int) (this->globalScaling * sprite.posY);
+            int playerPosX = (int) (this->globalScaling * game.player.posX);
+            int playerPosY = (int) (this->globalScaling * game.player.posY);
+            int frameSizeX = (int) (this->globalScaling * frame.sizeX);
+            int frameSizeY = (int) (this->globalScaling * frame.sizeY);
+
+            rect.x = spritePosX + (playerPosX > halfScreenX ? halfScreenX - playerPosX : 0); // todo right border
+            rect.y = spritePosY + (playerPosY > halfScreenY ? halfScreenY - playerPosY : 0); // todo bottom border
+            rect.w = frameSizeX;
+            rect.h = frameSizeY;
+
             SDL_RenderCopy(this->renderer, frame.texture, NULL, &rect);
         }
     }
