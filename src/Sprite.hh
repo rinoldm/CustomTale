@@ -17,24 +17,25 @@ typedef struct
 
 class Sprite
 {
-    public:
-        std::vector<Frame> frames;
-        unsigned int currentFrame;
-        unsigned int totalFrames;
-        bool stopped;
-        double posX;
-        double posY;
-        bool isVisible;
+public:
+    std::vector<Frame> frames;
+    unsigned int    currentFrame;
+    unsigned int    totalFrames;
+    bool            stopped;
+    double          posX;
+    double          posY;
+    bool            isVisible;
 
-        Sprite(){};
-        Sprite(std::vector<std::string>, double, double, bool, double);
-        Frame loadFrame(std::string, double);
-        Frame &getCurrentFrame();
-        void start();
-        void stop();
-        void restart();
-        void reset();
-        void update();
+    Sprite(){};
+    Sprite(std::vector<std::string>, double, double, bool, double);
+
+    Frame           loadFrame(std::string, double);
+    Frame &         getCurrentFrame();
+    void            start();
+    void            stop();
+    void            restart();
+    void            reset();
+    void            update();
 };
 
 #endif

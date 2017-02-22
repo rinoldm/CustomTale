@@ -5,6 +5,7 @@
 
 #include "Graphics.hh"
 #include "Player.hh"
+#include "Map.hh"
 
 enum
 {
@@ -13,16 +14,20 @@ enum
 
 class Game
 {
-    public:
-        std::string name;
-        std::vector<int> states;
-        Player player;
+public:
+    std::string     projectName;
+    std::string     projectPath;
+    std::vector<int> states;
+    Player          player;
+    Map             map;
 
     Game(std::string name);
 
+    void            loadJsonFile(std::string, Json::Value &);
     std::vector<std::string> jsonToStrings(Json::Value json);
-    void handleInput();
-    void update();
+    void            loadMap(std::string);
+    void            handleInput();
+    void            update();
 };
 
 #endif

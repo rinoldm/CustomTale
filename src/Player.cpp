@@ -5,7 +5,7 @@ extern Game         game;
 extern Json::Value  data;
 extern Graphics     graphics;
 
-Player::Player(double posX, double posY, std::string initialSprite) : Entity("Player", posX, posY, initialSprite, 1)
+Player::Player(double posX, double posY, std::string initialSprite) : Entity("Player", "Player", posX, posY, initialSprite, 1)
 {
     this->speed = 2.5;
 

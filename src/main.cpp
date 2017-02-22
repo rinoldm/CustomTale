@@ -5,15 +5,20 @@
 
 Game        game("CustomTale");
 Json::Value data;
-Graphics    graphics(640, 480, game.name);
+Graphics    graphics(640, 480, game.projectName);
 
 void debugDisplaySprites()
 {
-    for (auto i = graphics.sprites.begin(); i != graphics.sprites.end(); ++i)
+    for (unsigned int layer = 0; layer < graphics.sprites.size(); ++layer)
     {
-        std::cout << "  " << i->first << std::endl;
-        for (unsigned int j = 0; j < i->second.frames.size(); ++j)
-            std::cout << "    " << j << " " <<i->second.frames[j].name << std::endl;
+        std::cout << "Layer " << layer << ":" << std::endl;
+        for (auto i = graphics.sprites[layer].begin(); i != graphics.sprites[layer].end(); ++i)
+        {
+            std::cout << "  " << i->first << std::endl;
+            for (unsigned int j = 0; j < i->second.frames.size(); ++j)
+                std::cout << "    " << j << " " <<i->second.frames[j].name << std::endl;
+        }
+        std::cout << std::endl;
     }
 }
 
@@ -21,10 +26,9 @@ int main(int ac, char **av)
 {
     atexit([]{graphics.quit();});
 
-    std::ifstream dataFile("data/" + game.name + "/project.json", std::ifstream::binary);
-    dataFile >> data;
-
+    game.loadJsonFile(game.projectPath + "project.json", data);
     graphics.initBackground();
+    game.loadMap("map_ruins1");
     //graphics.initMap();
     game.player.loadSprites();
     //debugDisplaySprites();

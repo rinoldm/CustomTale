@@ -20,7 +20,7 @@ Frame Sprite::loadFrame(std::string filename, double scaling)
 {
     Frame frame;
 
-    frame.image = IMG_Load(("data/" + game.name + "/sprites/" + filename).c_str());
+    frame.image = IMG_Load((game.projectPath + "sprites/" + filename).c_str());
     if (frame.image == NULL)
         exit(-1);
 

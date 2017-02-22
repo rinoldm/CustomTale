@@ -8,20 +8,21 @@
 
 class Entity
 {
-    public:
-        std::string name;
-        double posX;
-        double posY;
+public:
+    std::string     type;
+    std::string     name;
+    double          posX;
+    double          posY;
+    std::map<std::string, unsigned int> sprites;
+    std::string     currentSprite;
+    double          scaling;
+    std::vector<int> states;
 
-        std::map<std::string, unsigned int> sprites;
-        std::string currentSprite;
-        double scaling;
-        std::vector<int> states;
+    Entity(std::string, std::string, double, double, std::string, double);
 
-        Entity(std::string, double, double, std::string, double);
-        void loadSprites();
-        Sprite &getCurrentSprite();
-        void changeSpriteTo(const std::string &);
+    void            loadSprites();
+    Sprite &        getCurrentSprite();
+    void            changeSpriteTo(const std::string &);
 };
 
 #endif

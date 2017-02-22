@@ -8,9 +8,12 @@ Graphics::Graphics(int winX, int winY, const std::string &winTitle)
     this->windowX = winX;
     this->windowY = winY;
     this->windowTitle = winTitle;
+    this->tileSizeX = 20;
+    this->tileSizeY = 20;
     this->globalScaling = 2;
     this->fps = 30;
     this->lastSpriteID = -1;
+    this->sprites.resize(9, {});
 
     this->initWindow();
 }
@@ -49,49 +52,54 @@ void Graphics::getInput()
     }
 }
 
-unsigned int Graphics::loadSprite(std::vector<std::string> filenames, double posX, double posY, bool isVisible = true, double scaling = 1)
+unsigned int Graphics::loadSprite(std::vector<std::string> filenames, unsigned int layer, double posX, double posY, bool isVisible = true, double scaling = 1)
 {
     Sprite sprite(filenames, posX, posY, isVisible, scaling);
-    this->sprites.insert({++this->lastSpriteID, sprite});
+    this->sprites[layer].insert({++this->lastSpriteID, sprite});
     if (isVisible)
-        this->sprites[this->lastSpriteID].start();
+        this->sprites[layer][this->lastSpriteID].start();
     return (this->lastSpriteID);
 }
 
 void Graphics::initBackground()
 {
-    this->loadSprite({"spr_undertaletitle_0.png"}, 0, 0);
-    this->loadSprite(game.jsonToStrings(data["Player"]["sprites"]["walkingDown"]), 120, 60);
+    this->loadSprite({"spr_undertaletitle_0.png"}, layer_background, 0, 0);
+    for (int i = 0; i < 100; ++i)
+    this->loadSprite(game.jsonToStrings(data["Player"]["sprites"]["walkingDown"]), layer_entities, 120, 60);
 }
 
 void Graphics::render()
 {
     SDL_RenderClear(this->renderer);
-    for (unsigned int i = 0; i < this->sprites.size(); ++i)
+
+    for (unsigned int layer = 0; layer < this->sprites.size(); ++layer)
     {
-        Sprite &sprite = this->sprites[i];
-        sprite.update();
-
-        if (sprite.isVisible)
+        for (auto &i : this->sprites[layer])
         {
-            Frame &frame = sprite.getCurrentFrame();
-            SDL_Rect rect;
+            Sprite &sprite = i.second;
+            sprite.update();
 
-            int halfScreenX = (this->windowX - 20) / 2; // todo adjust for map
-            int halfScreenY = (this->windowY - 20) / 2; // todo adjust for map
-            int spritePosX = (int) (this->globalScaling * sprite.posX);
-            int spritePosY = (int) (this->globalScaling * sprite.posY);
-            int playerPosX = (int) (this->globalScaling * game.player.posX);
-            int playerPosY = (int) (this->globalScaling * game.player.posY);
-            int frameSizeX = (int) (this->globalScaling * frame.sizeX);
-            int frameSizeY = (int) (this->globalScaling * frame.sizeY);
+            if (sprite.isVisible)
+            {
+                Frame &frame = sprite.getCurrentFrame();
+                SDL_Rect rect;
 
-            rect.x = spritePosX + (playerPosX > halfScreenX ? halfScreenX - playerPosX : 0); // todo right border
-            rect.y = spritePosY + (playerPosY > halfScreenY ? halfScreenY - playerPosY : 0); // todo bottom border
-            rect.w = frameSizeX;
-            rect.h = frameSizeY;
+                int halfScreenX = (this->windowX - 20) / 2; // todo adjust for map
+                int halfScreenY = (this->windowY - 20) / 2; // todo adjust for map
+                int spritePosX = (int) (this->globalScaling * sprite.posX);
+                int spritePosY = (int) (this->globalScaling * sprite.posY);
+                int playerPosX = (int) (this->globalScaling * game.player.posX);
+                int playerPosY = (int) (this->globalScaling * game.player.posY);
+                int frameSizeX = (int) (this->globalScaling * frame.sizeX);
+                int frameSizeY = (int) (this->globalScaling * frame.sizeY);
 
-            SDL_RenderCopy(this->renderer, frame.texture, NULL, &rect);
+                rect.x = spritePosX + (playerPosX > halfScreenX ? halfScreenX - playerPosX : 0); // todo right border
+                rect.y = spritePosY + (playerPosY > halfScreenY ? halfScreenY - playerPosY : 0); // todo bottom border
+                rect.w = frameSizeX;
+                rect.h = frameSizeY;
+
+                SDL_RenderCopy(this->renderer, frame.texture, NULL, &rect);
+            }
         }
     }
     SDL_RenderPresent(this->renderer);
@@ -101,12 +109,15 @@ void Graphics::quit()
 {
     this->error(SDL_GetError());
 
-    for (unsigned int i = 0; i < this->sprites.size(); ++i)
+    for (unsigned int layer = 0; layer < this->sprites.size(); ++layer)
     {
-        for (unsigned int j = 0; j < this->sprites[i].frames.size(); ++j)
+        for (unsigned int i = 0; i < this->sprites[layer].size(); ++i)
         {
-            SDL_FreeSurface(this->sprites[i].frames[j].image);
-            SDL_DestroyTexture(this->sprites[i].frames[j].texture);
+            for (unsigned int j = 0; j < this->sprites[layer][i].frames.size(); ++j)
+            {
+                SDL_FreeSurface(this->sprites[layer][i].frames[j].image);
+                SDL_DestroyTexture(this->sprites[layer][i].frames[j].texture);
+            }
         }
     }
     IMG_Quit();

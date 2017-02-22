@@ -2,11 +2,18 @@
 
 extern Graphics graphics;
 
-Game::Game(std::string name) : player(220, 20, "walkingDown")
+Game::Game(std::string projectName) : player(220, 20, "walkingDown")
 {
-    this->name = name;
+    this->projectName = projectName;
+    this->projectPath = "data/" + this->projectName + "/";
     this->states.resize(1, 0);
     this->states[isQuitting] = false;
+}
+
+void Game::loadJsonFile(std::string filename, Json::Value &dest)
+{
+    std::ifstream jsonFile(filename, std::ifstream::binary);
+    jsonFile >> dest;
 }
 
 std::vector<std::string> Game::jsonToStrings(Json::Value json)
@@ -15,6 +22,13 @@ std::vector<std::string> Game::jsonToStrings(Json::Value json)
     for (unsigned int i = 0; i < json.size(); ++i)
         strings.push_back(json[i].asString());
     return (strings);
+}
+
+void Game::loadMap(std::string mapName)
+{
+    Json::Value mapData;
+    this->loadJsonFile(this->projectPath + "maps/" + mapName + ".json", mapData);
+    this->map = Map(mapName, mapData);
 }
 
 void Game::handleInput()
